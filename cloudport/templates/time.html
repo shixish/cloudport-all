@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-us" xml:lang="en-us" >
+<head>
+<title>Roshan</title>
+<link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="/static/css/ie.css" /><![endif]-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script type="text/javascript">var d = new Date(); var time= d.getHours();
+	if (time <10)
+	{
+		document.write("<b>Good Morning</b>")
+	}
+</script>
+{% extends "base.html" %}
+
+{% block title %}FORM EXAMPLE{% endblock %}
+
+{% block content %}
+<html><body><form action="">
+	<fieldset>
+		<legend>Personal information: </legend>
+		Name: <input type="text" size ="60" /><br />
+		E-mail: <input type="text" size="30"/><br />
+		Password: <input type="password" size="60"/><br />
+		Date of birth:<input type="text" size="10" /><br />
+		<p>Please click the "Submit" button. </p>
+        <input type="submit" value="Submit" />
+		
+	</fieldset>
+	</form>
+Date and time today : {{ time }}.<br>
+<img src="{{ img }}" \> 
+
+{% endblock %}

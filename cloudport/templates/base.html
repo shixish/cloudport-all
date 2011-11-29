@@ -1,0 +1,148 @@
+{% load compress %}
+{% comment %}
+	verbatim allows the use of javascript templates.
+	compress is a js/css aggregator, it also allows me to compile using the "LESS" CSS engine
+{% endcomment %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Roshan</title>
+	{% compress css %}
+    <link rel="stylesheet" href="/static/css/base.less" type="text/less" charset="utf-8">
+    {% endcompress %}
+	<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="/static/css/ie.css" /><![endif]-->
+	{% compress js %}
+	<script type="text/javascript" charset="utf-8" src="/static/js/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/static/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/static/js/underscore-1.2.1.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/static/js/backbone.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/static/js/handlebars.1.0.0.beta.3.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/static/js/ajaxfileupload.js"></script>
+	{% endcompress %}
+	{% block head %}
+	<html>
+		<head>
+		<style type="text/css">
+		
+div
+{
+width:100px;
+height:100px;
+background:blue;
+position:relative;
+animation:mymove 5s;
+animation-iteration-count:4;
+-moz-animation:mymove 5s;
+-moz-animation-iteration-count:4;
+-webkit-animation:mymove 5s;
+-webkit-animation-iteration-count:103;
+}
+
+@keyframes mymove
+{
+from {right:0px;}
+to {left:200px;}
+}
+
+@-moz-keyframes mymove /* Firefox */
+{
+from {right:0px;}
+to {left:200px;}
+}
+
+@-webkit-keyframes mymove /* Safari and Chrome */
+{
+from {right:0px;}
+to {left:200px;}
+}
+
+		h1{
+			max-height:550px
+			background-color:#0000FF;
+			text-align:right;
+		}
+		h2
+		{
+			color:white;
+			text-align:center;
+			font-family:"Times New Roman";
+			font-size:40px;
+			background-color:#0000FF;
+		}
+		h3{
+			text-align:left;
+			color:black;
+			font-family:arial;
+			background-color:#5F9EA0
+		}
+		</style>
+			</head>
+		<body>
+			<h1>
+			<FORM>
+            <INPUT TYPE="BUTTON" VALUE="Logout" ONCLICK="window.location.href='http://www.google.com'"> 
+            </FORM>
+           </h1>
+           <h2>
+			Cloudport Website
+			</h2>			
+			<FORM>
+			<INPUT TYPE="BUTTON" VALUE="Log in" ONCLICK="window.location.href='http://www.google.com'"> 	
+            <INPUT TYPE="BUTTON" VALUE="Home Page" ONCLICK="window.location.href='http://www.google.com'"> 
+            <INPUT TYPE="BUTTON" VALUE="New" ONCLICK="window.location.href='http://www.google.com'">
+            <INPUT TYPE="BUTTON" VALUE="Help" ONCLICK="window.location.href='http://www.google.com'"> 
+            </FORM>
+            <h3>
+            <html><body><form action="">
+	    <fieldset>
+		<legend>Personal information: </legend>
+		Name: <input type="text" size ="60" /><br />
+		E-mail: <input type="text" size="30"/><br />
+		Password: <input type="password" size="60"/><br />
+		Date of birth:<input type="text" size="10" /><br />
+		Please click the "Submit" button
+        <input type="submit" value="Submit" />
+		
+	</fieldset>
+	</form>
+            </h3>
+			<script type="text/javascript">
+			</script>
+			
+		</body>
+	</html>
+	{% endblock %}
+	<!--<meta name="robots" content="NONE,NOARCHIVE" />-->
+</head>
+<body>
+<!-- Container -->
+<div id="container">
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+			<h1 id="site-name">{% block title %}Roshan{% endblock %}</h1>
+        </div>
+    </div>
+    <!-- END Header -->
+    <!-- Content -->
+    <div id="content">
+		<div id="content-main">
+		{% block content %}
+			Errr something went wrong..?
+		{% endblock %}
+		</div>
+    	<br class="clear" />
+    </div>
+    <!-- END Content -->
+    <div id="footer">
+    	{% block footer %}
+    	<html>
+    	<h1>********************************************************</h1>
+    	</html>
+    	{% endblock %}
+    </div>
+</div>
+<!-- END Container -->
+
+</body>
+</html>

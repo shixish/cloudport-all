@@ -1,0 +1,109 @@
+body{
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+table{
+	border-collapse: collapse;
+}
+
+a, a:active, a:visited {
+	color: #008DE6;
+	text-decoration: none;
+	border-bottom: 1px solid transparent; /*keeps the hover border from bumping things around*/
+}
+
+a:hover{
+	border-bottom: 1px dotted;
+}
+
+/* manager stuff */
+#app{
+	width:1280px;
+}
+
+#img{
+	float:right;
+}
+
+#content{
+	form{
+		label{
+			display:block;
+		}
+	}
+}
+
+#manager-table{
+	width: 500px;
+	border:1px solid black;
+	list-style: none;
+	padding: 0; 
+	margin: 0 40px;
+	background: url('/static/images/table-cycle.jpg');
+	min-height: 45px;
+	
+	li{
+		height: 44px;
+		line-height: 44px;
+		padding: 0 12px 0 12px;
+	}
+	
+	.controls{
+		float:right;
+	}
+	.controls .button{
+		margin-left: 75px;
+	}
+}
+
+/* jquery ui styles */
+.ui-sortable-helper{
+	/*background: #eeeeee !important;*/
+	border:1px solid black;
+}
+.ui-state-highlight{
+	background: #99bbff !important;
+	height: 20px;
+}
+
+.text-right{
+	text-align: right;
+}
+
+/* free icons from: http://www.webappers.com/2008/02/12/webappers-released-free-web-application-icons-set/ */
+span.button{
+	display:inline-block;
+	width:26px;
+	height:24px;
+	vertical-align:middle;
+}
+a.button{
+	display:inline-block;
+	padding-left:26px;
+	line-height:24px;
+	vertical-align:middle;
+}
+.add.button{
+	background:url('/static/images/Web-Application-Icons-Set/PNG-24/Add.png') no-repeat left center;
+}
+.delete.button{
+	background:url('/static/images/Web-Application-Icons-Set/PNG-24/Delete.png') no-repeat left center;
+}
+.pie.button{
+	background:url('/static/images/Web-Application-Icons-Set/PNG-24/Pie%20Chart.png') no-repeat left center;
+}
+.line.button{
+	background:url('/static/images/Web-Application-Icons-Set/PNG-24/Line%20Chart.png') no-repeat left center;
+}
+.bar.button{
+	background:url('/static/images/Web-Application-Icons-Set/PNG-24/Line%20Chart.png') no-repeat left center;
+}
+.load.button{
+	background:url('/static/images/Web-Application-Icons-Set/PNG-24/Load.png') no-repeat left center;
+}
+.warning.button{
+	background:url('/static/images/Web-Application-Icons-Set/PNG-24/Warning.png') no-repeat left center;
+}
+.exit.button{
+	background:url('/static/images/Web-Application-Icons-Set/PNG-24/Exit.png') no-repeat left center;
+}

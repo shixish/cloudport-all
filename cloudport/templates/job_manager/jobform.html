@@ -1,0 +1,21 @@
+{% comment %}
+	{% extends "base.html" %}
+	
+	{% block title %}Upload form{% endblock %}
+	
+	{% block content %}
+	
+	{% if form.errors %}
+	  <div style="color:red;">ERROR: {{ form.errors }}</div>
+	{% endif %}
+{% endcomment %}
+<form id="job_upload_form" enctype="multipart/form-data" method="post" action="/manager/upload">
+	<table>
+	{% csrf_token %}
+	{{ form }}
+	</table>
+	<input type="submit" value="Save" id="save_button"/>
+</form>
+{% comment %}
+{% endblock %}
+{% endcomment %}

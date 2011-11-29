@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Upload form{% endblock %}
+
+{% block content %}
+
+{% if form.errors %}
+  <div style="color:red;">ERROR: {{ form.errors }}</div>
+{% endif %}
+<form enctype="multipart/form-data" method="post" action="/manager/upload">{% csrf_token %}
+
+ <b>Title</b> {{ form.title }} <br>
+ <b>{{ form.file.label_tag }}</b>  {{ form.file}} <br>
+ <input type="submit" value="Save" id="Save"/>
+</form>
+
+{% endblock %}

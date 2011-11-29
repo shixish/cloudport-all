@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load verbatim %}
+
+{% block title %}Manager{% endblock %}
+
+{% block head %}
+	{% verbatim %}
+	<script id="job-row" type="text/x-handlebars-template">
+		<strong>{{title}}</strong>
+		<span class="controls">
+		{{#if stopped}}
+			<a href="#" class="restart warning button">Restart</a>
+		{{else}}
+			{{#if done}}
+				<a href="/jobs_finished/{{output}}" class="view line button">View Results</a>
+			{{else}}
+				<!--<a href="#pause={{id}}" class="pause warning button">Pause</a>-->
+				<a href="#stop={{id}}" class="stop delete button">Stop</a>
+			{{/if}}
+		{{/if}}
+		</span>
+	</script>
+	<script id="job-rows" type="text/x-handlebars-template">
+		{{#list things}}
+			<strong>{{title}}</strong>
+			<span class="controls">
+				<a href="#pause={{id}}" class="pause warning button">Pause</a>
+				<a href="#stop={{id}}" class="stop delete button">Stop</a>
+			</span>
+		{{/list}}
+	</script>
+	{% endverbatim %}
+	<script type="text/javascript">
+		$(function(){
+			/*var Workspace = Backbone.Router.extend({
+				routes: {
+					"help":								 "help",		// #help
+					"search/:query":				"search",	// #search/kiwis
+					"search/:query/p:page": "search"	 // #search/kiwis/p7
+				},
+				help: function() {
+				console.log("Help Fired!");
+				},
+				search: function(query, page) {
+					console.log("Searching for: " + query + " on page " + page);
+				}
+			});
+			var ws = new Workspace;
+			ws.bind("route:help", function(){
+				console.log("Help Fired! 2");
+			});
+			Backbone.history.start();
+			*/
+			
+			var Job = Backbone.Model.extend({
+				initialize: function(e){
+					//console.log('init', e);
+					this.bind('change:status',	 this.changeStatus, this);
+					//this.set({'status':1});
+					this.changeStatus();
+				},
+				changeStatus:function(e){
+					//assume a running state
+					var stopped = false, done = false;
+					switch(this.get('status')){
+						case 0: break;//Running state
+						case 1: done = true; break;//Done state
+						case 2: stopped = true; break; //Error state
+					}
+					this.set({'stopped':stopped, 'done':done});
+				}
+				/*defaults: function(){
+					return {
+						"id":0,
+						"done": false,
+						"name":""
+					}
+				},*/
+			});
+			
+			JobList = Backbone.Collection.extend({
+				model: Job,
+				url: '/rest/job/?_accept=application/json',
+				//url: '/manager/get/jobs',
+				test:function(){
+					return this.filter(function(it){
+						console.log(it);
+					});
+				}
+			});
+			
+			var JobView = Backbone.View.extend({
+				tagName: "li",
+				
+				template: Handlebars.compile($('#job-row').html()),
+				
+				events: {
+					"click .view":		"view",
+					"click .pause":		"pause",
+					"click .stop":		"stop",
+					"click .restart":	"restart",
+				},
+				
+				view: function(){
+					//alert('view');
+					var img_url = 
+					$('#app #img').html('<img src="/jobs_finished/'+this.model.get('output')+'" \>');
+					return false;
+				},
+				
+				pause: function(){
+					alert('pause');
+				},
+				
+				stop: function(){
+					//alert('stop');
+					this.model.set({'stopped': true});
+					this.render();
+				},
+				
+				restart: function(){
+					//alert('stop');
+					this.model.set({'stopped': false});
+					this.render();
+				},
+				
+				render: function() {
+					$(this.el).html(this.template(this.model.toJSON()));
+					if (this.model.get('done')) $(this.el).addClass('done'); //one directional... can't become "undone"
+					return this;
+				}
+			});
+			
+			var list = new JobList;
+			
+			var App = Backbone.View.extend({
+				el: $('#app'),
+				//tagName: 'div',
+				//id: 'app',
+				
+				initialize: function(){
+					list.bind('add',	 this.add, this);
+					list.bind('reset', this.addAll, this);
+					//list.bind('all',	 this.render, this);
+				},
+				
+				events: {
+					"click .add":	"clicked"
+				},
+				
+				clicked: function(e){
+					console.log('clicked..');
+					var names = ['Bob', 'Bill', 'Jill', 'Tom', 'Ace'];
+					var rand = Math.floor(Math.random()*names.length);
+					list.add({"id":this.thingid++, "status": Math.round(Math.random()*2), "title":names[rand]+" job"});
+				},
+				
+				add: function(m){
+					var view = new JobView({model: m});
+					$('#manager-table', this.el).append(m, view.render().el);
+				},
+				
+				addAll: function(e){ //gets fired after fetch()
+					list.each(this.add); //attaches a view to each of the models
+					//console.log(e, "reset");
+				},
+				
+				render: function(){
+					console.log("render");
+				}
+			});
+			
+			var app = new App;
+			
+			list.fetch(); //does an ajax request to fill up the JobList
+			//list.add({{bootstrap}});
+			
+	
+			/*list.add([
+				{"id":0, "done": false, "name":"Bob job"},
+				{"id":1, "done": false, "name":"Bill job"},
+				{"id":2, "done": false, "name":"job 345"},
+				{"id":3, "done": true, "name":"Jill job", "output":"infosthetics02.jpg"},
+				{"id":4, "done": true, "name":"Crazy cool job", "output":"graphs.jpg"}
+			]);*/
+			//var view = new JobView({'model': thinger});
+			//var view = new DocumentRow({'model': [thinger]});
+			
+			$("#manager-table").sortable();//{placeholder: "ui-state-highlight"}
+			$("#manager-table").disableSelection();
+			
+			$("#job_upload_form").live("submit", function(){
+				console.log($(this).serialize());
+				/*
+				$.ajaxFileUpload({
+					url:'/manager/upload',
+					secureuri:false,
+					fileElementId:'id_file',
+					dataType: 'json',
+					data:$(this).serialize(),//{name:'logan', id:'id'},
+					success: function (data, status)
+					{
+						if(typeof(data.error) != 'undefined')
+						{
+							if(data.error != '')
+							{
+								alert(data.error);
+							}else
+							{
+								alert(data.msg);
+							}
+						}
+					},
+					error: function (data, status, e)
+					{
+						alert(e);
+					}
+				});
+				*/
+				//return false;
+			});
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div id="app">
+		<a href="#" class="add button" >Add an item</a><br>
+		<div id="img"></div>
+		<ul id="manager-table"></ul>
+	</div>
+	<br>
+	<a href="/manager/upload" class="load button">Upload New Job</a>
+	<!--<iframe id="job_upload_frame" name="job_upload_frame" style="position:absolute; top:-9999px; left:-9999px"></iframe>-->
+	<iframe id="job_upload_frame" name="job_upload_frame" style="height:150px;width:150px;"></iframe>
+	<form id="job_upload_form" enctype="multipart/form-data" method="post" action="/manager/upload" target="job_upload_frame">
+		<table>
+		{% csrf_token %}
+		{{ form }}
+		</table>
+		<input type="submit" value="Save" id="save_button"/>
+	</form>
+{% endblock %}
+
+{% block footer %}
+{% if not user.is_anonymous %}<a href="/accounts/logout/?next=/" class="exit button">Log out</a>{% endif %}
+{% endblock %}

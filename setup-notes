@@ -1,0 +1,13 @@
+I put some environment variables in /etc/environment that allows python
+ to descover our django project files
+
+I set this directory to umask 0002 which gives files the permissions:
+ drwxrwxr x
+  rw rw r
+
+This works for files and directories i create locally, but though ftp it's
+ giving files 777 which doesn't make much sense...
+
+Editing /usr/lib/openssh/sftp-server
+replaced:	Subsystem sftp /usr/lib/openssh/sftp-server
+with:		Subsystem sftp /usr/lib/openssh/sftp-server -u 0002
