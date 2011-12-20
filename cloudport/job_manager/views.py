@@ -32,7 +32,7 @@ def success(request, title):
     return HttpResponse("The file upload appears to have gone smoothly. <br> <a href=\"/manager/\">go back to manager</a>")
 
 @login_required()
-def upload_file(request):
+def upload_job(request):
     if request.method == 'POST':
         form = JobForm(request.POST, request.FILES)
         if form.is_valid():
@@ -43,6 +43,21 @@ def upload_file(request):
     c = RequestContext(request)
     c.update(csrf(request))
     return render_to_response('job_manager/jobform.html', {'form': form}, c)
+
+@login_required()
+def upload_file(request):
+    if request.method == 'POST':
+        form = JobForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
+            return HttpResponse('{"status":"success"}')
+    else:
+        #form = JobForm()
+        return HttpResponse('{"status":"fail", "description":"Something broke!"}')
+    c = RequestContext(request)
+    c.update(csrf(request))
+    return HttpResponseRedirect('/manager/success/')
 
 #def get_job_list():
 #    items = [
@@ -58,7 +73,8 @@ def upload_file(request):
 #    newest = max(filelist, key=lambda x: os.stat(dir+x).st_mtime)
 #    items.append({"id":5, "done": True, "name":"Latest Result", "output":newest})
 #    return items
-#from django.core import serializers
+
+#from django.core import serializers
 #import json
 #@login_required()
 #def get(request, thing):
@@ -66,11 +82,22 @@ def upload_file(request):
 #        #return HttpResponse(serializers.serialize('json', Job.objects.all()))
 #        return HttpResponse(json.dumps(get_job_list()))
 
+#To do with the RESTful API:
+from djangorestframework.resources import ModelResource
+from djangorestframework.views import ListOrCreateModelView, InstanceModelView, ListModelView
+from djangorestframework import permissions, authentication
+from djangorestframework.renderers import JSONRenderer
+
+class MyResource(ModelResource):
+    model = DataFile
+
 @login_required()
-def manager(request):
+def manager(request): 
     #items = get_job_list()
     #return render_to_response('job_manager/manager.html', {"items":items}, context_instance=RequestContext(request))
     c = RequestContext(request)
     c.update(csrf(request))
-    return render_to_response('job_manager/manager.html', {'form':JobForm(), 'bootstrap':"TODO"}, c)
+    view = InstanceModelView.as_view(resource=MyResource)
+    data = repr(JSONRenderer(view).render())
+    return render_to_response('job_manager/manager.html', {'form':DataFileForm(), 'bootstrap':'TODO', 'test':dir(view)}, c)
 

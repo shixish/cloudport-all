@@ -15,7 +15,7 @@ MEDIA_URL = '/static/'
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/static/'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -51,17 +51,17 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    #'django.contrib.staticfiles', #only available since 1.3
+    'django.contrib.staticfiles', #only available since 1.3
     'djangorestframework', #i installed this library using "sudo pip install djangorestframework"
     #'less', #installed using "sudo pip install django-less"
-    'compressor',
+    'compressor', #installed using "pip install django_compressor"
     'cloudport.polls',
     'cloudport.job_manager',
     'cloudport.default',
     'cloudport.templates', #needed to do this to make the templatetags work...
 )
 
-LESS_EXECUTABLE = '/var/lib/gems/1.8/bin/lessc'
+LESS_EXECUTABLE = 'lessc'
 
 COMPRESS_PRECOMPILERS = (
     #('text/coffeescript', 'coffee --compile --stdio'),
@@ -74,3 +74,17 @@ COMPRESS_ENABLED = True
 TASK_UPLOAD_FILE_EXTENSIONS = ['sce']
 #TASK_UPLOAD_FILE_TYPES = ['pdf', 'vnd.oasis.opendocument.text','vnd.ms-excel','msword','application',]
 TASK_UPLOAD_FILE_MAX_SIZE = "5242880"
+
+STATICFILES_DIRS = (
+    "/var/www-django/static",
+    #"/home/polls.com/polls/static",
+    #"/opt/webfiles/common",
+)
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder"
+)
+
+STATIC_ROOT = "/var/www-django/static/"
