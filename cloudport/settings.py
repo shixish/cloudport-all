@@ -5,17 +5,35 @@ DEBUG = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/var/www-django/static/'
+MEDIA_ROOT = '/var/www-django/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/static/'
+MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = (
+    "/var/www-django/cloudport/static",
+    #"/home/polls.com/polls/static",
+    #"/opt/webfiles/common",
+)
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder"
+)
+
+STATIC_ROOT = "/var/www-django/media/static"
+STATIC_URL = "/static/"
+
+COMPRESS_ROOT = STATIC_ROOT
+STATIC_URL = STATIC_URL
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/static/'
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -75,16 +93,3 @@ TASK_UPLOAD_FILE_EXTENSIONS = ['sce']
 #TASK_UPLOAD_FILE_TYPES = ['pdf', 'vnd.oasis.opendocument.text','vnd.ms-excel','msword','application',]
 TASK_UPLOAD_FILE_MAX_SIZE = "5242880"
 
-STATICFILES_DIRS = (
-    "/var/www-django/static",
-    #"/home/polls.com/polls/static",
-    #"/opt/webfiles/common",
-)
-
-STATICFILES_FINDERS = (
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder"
-)
-
-STATIC_ROOT = "/var/www-django/static/"

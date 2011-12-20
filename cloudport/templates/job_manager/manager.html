@@ -232,7 +232,7 @@
 	<br>
 	<a href="/manager/upload" class="load button">Upload New Job</a>
 	<!--<iframe id="job_upload_frame" name="job_upload_frame" style="position:absolute; top:-9999px; left:-9999px"></iframe>-->
-	<!--<iframe id="job_upload_frame" name="job_upload_frame" style="height:150px;width:150px;"></iframe>-->
+	<!-- <iframe id="job_upload_frame" name="job_upload_frame" style="height:150px;width:150px;"></iframe>-->
 	<form id="job_upload_form" enctype="multipart/form-data" method="post" action="/manager/upload" target="job_upload_frame">
 		<table>
 		{% csrf_token %}
@@ -240,7 +240,6 @@
 		</table>
 		<input type="submit" value="Save" id="save_button"/>
 	</form>
-	{{test}}
 {% endblock %}
 
 {% block footer %}

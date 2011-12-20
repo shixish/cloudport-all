@@ -14,6 +14,7 @@ import json
 
 class DataFile(models.Model):
     file = models.FileField(upload_to="JOB_UPLOADS")
+    #file = models.FileField(upload_to="jobs_uploads ", storage=fs)
     
 class DataFileForm(forms.ModelForm):
     class Meta:

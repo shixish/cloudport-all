@@ -47,17 +47,18 @@ def upload_job(request):
 @login_required()
 def upload_file(request):
     if request.method == 'POST':
-        form = JobForm(request.POST, request.FILES)
+        form = DataFileForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
             return HttpResponse('{"status":"success"}')
-    else:
+        else:
+            return HttpResponse('{"status":"fail", "error":"Something broke!"}'+repr(request)+repr(form))
+    #else:
         #form = JobForm()
-        return HttpResponse('{"status":"fail", "description":"Something broke!"}')
     c = RequestContext(request)
     c.update(csrf(request))
-    return HttpResponseRedirect('/manager/success/')
+    return HttpResponse('{"status":"fail", "error":"No data"}')
 
 #def get_job_list():
 #    items = [
@@ -83,13 +84,13 @@ def upload_file(request):
 #        return HttpResponse(json.dumps(get_job_list()))
 
 #To do with the RESTful API:
-from djangorestframework.resources import ModelResource
-from djangorestframework.views import ListOrCreateModelView, InstanceModelView, ListModelView
-from djangorestframework import permissions, authentication
-from djangorestframework.renderers import JSONRenderer
-
-class MyResource(ModelResource):
-    model = DataFile
+#from djangorestframework.resources import ModelResource
+#from djangorestframework.views import ListOrCreateModelView, InstanceModelView, ListModelView
+#from djangorestframework import permissions, authentication
+#from djangorestframework.renderers import JSONRenderer
+#
+#class MyResource(ModelResource):
+#    model = DataFile
 
 @login_required()
 def manager(request): 
@@ -97,7 +98,5 @@ def manager(request):
     #return render_to_response('job_manager/manager.html', {"items":items}, context_instance=RequestContext(request))
     c = RequestContext(request)
     c.update(csrf(request))
-    view = InstanceModelView.as_view(resource=MyResource)
-    data = repr(JSONRenderer(view).render())
-    return render_to_response('job_manager/manager.html', {'form':DataFileForm(), 'bootstrap':'TODO', 'test':dir(view)}, c)
+    return render_to_response('job_manager/manager.html', {'form':DataFileForm(), 'bootstrap':'TODO'}, c)
 
