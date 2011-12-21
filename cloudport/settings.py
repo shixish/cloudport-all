@@ -13,7 +13,7 @@ MEDIA_ROOT = '/var/www-django/media/'
 MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = (
-    "/var/www-django/cloudport/static",
+    #"/var/www-django/cloudport/static",
     #"/home/polls.com/polls/static",
     #"/opt/webfiles/common",
 )
