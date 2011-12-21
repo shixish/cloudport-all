@@ -44,6 +44,7 @@ def upload_job(request):
     c.update(csrf(request))
     return render_to_response('job_manager/jobform.html', {'form': form}, c)
 
+from django.forms.util import ErrorList
 @login_required()
 def upload_file(request):
     if request.method == 'POST':
@@ -53,7 +54,8 @@ def upload_file(request):
             #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
             return HttpResponse('{"status":"success"}')
         else:
-            return HttpResponse('{"status":"fail", "error":"Something broke!"}'+repr(request)+repr(form))
+            errors = ''.join(['{'+','.join([u'"%s":"%s"'%(e, i) for i in form.errors[e]])+'}' for e in form.errors])
+            return HttpResponse('{"status":"fail", "errors":'+errors+'}')
     #else:
         #form = JobForm()
     c = RequestContext(request)
