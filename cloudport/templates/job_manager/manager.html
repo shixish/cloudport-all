@@ -20,7 +20,13 @@
 		{{/if}}
 		</span>
 	</script>
-	<script id="job-rows" type="text/x-handlebars-template">
+	<script id="file-row" type="text/x-handlebars-template">
+		<strong>{{file}}</strong>
+		<span class="controls">
+			<a href="/media/{{file}}" class="save button">Download</a>
+		</span>
+	</script>
+	<!--<script id="job-rows" type="text/x-handlebars-template">
 		{{#list things}}
 			<strong>{{title}}</strong>
 			<span class="controls">
@@ -28,9 +34,48 @@
 				<a href="#stop={{id}}" class="stop delete button">Stop</a>
 			</span>
 		{{/list}}
-	</script>
+	</script>-->
 	{% endverbatim %}
+    <!--<script id="file-form-template" type="text/x-handlebars-template">
+        <div title="Upload a file">
+            <iframe id="job_upload_frame" name="job_upload_frame" style="position:absolute; top:-9999px; left:-9999px;visibility:hidden;"></iframe>
+            <form id="job_upload_form" enctype="multipart/form-data" method="post" action="/manager/new/file" target="job_upload_frame">
+                <table>
+                {% csrf_token %}
+                {{ file_form }}
+                </table>
+                <input type="submit" value="Save" id="save_button"/>
+            </form>
+        </div>
+    </script>
+    <script id="job-form-template" type="text/x-handlebars-template">
+        <div title="Create a new job">
+            <form id="job_upload_form" method="post" action="/manager/new/job">
+                <table>
+                {% csrf_token %}
+                {{ job_form }}
+                </table>
+                <input type="submit" value="Save" id="save_button"/>
+            </form>	
+        </div>
+    </script>-->
 	<script type="text/javascript">
+        $.fn.clear_form = function(){
+            $(this).find(':input').each(function() {
+                switch(this.type) {
+                    case 'password':
+                    case 'select-multiple':
+                    case 'select-one':
+                    case 'text':
+                    case 'textarea':
+                        $(this).val('');
+                        break;
+                    case 'checkbox':
+                    case 'radio':
+                        this.checked = false;
+                }
+            });
+        }
 		$(function(){
 			/*var Workspace = Backbone.Router.extend({
 				routes: {
@@ -110,7 +155,6 @@
 				
 				view: function(){
 					//alert('view');
-					//var img_url = 
 					$('#app #img').html('<img src="/jobs_finished/'+this.model.get('output')+'" \>');
 					return false;
 				},
@@ -140,26 +184,44 @@
 			});
 			
 			var JobListView = Backbone.View.extend({
-				tagName: "ul",
-				className: "table",
+				//tagName: "ul",
+				//className: "table",
+				tagName: "div",
 				//id: "manager-table",
-				//el: '<ul id="manager-table"></ul>',
 				
 				initialize: function(){
 					this.list = new JobList;
-					this.list.fetch();
-					this.list.bind('add',	 this.add, this);
+					this.list.bind('add', this.add, this);
 					this.list.bind('reset', this.addAll, this);
+					this.list.fetch();
+					//$(this.el).append('<ul class="table"></ul>');
+                    var $el = $(this.el);
+					$el.append('<h2>Jobs</h2>').append('<a id="add-job" href="#" class="add button">Add a new Job</a>');
+					this.$table = $('<ul class="table"></ul>').appendTo($el);
 					//list.bind('all',	 this.render, this);
 				},
+                
+                events: {
+					"click #add-job":		"form",
+					//"click .pause":		"pause",
+					//"click .stop":		"stop",
+					//"click .restart":	"restart",
+				},
+				
+				form: function(e){
+                    var pos = $(e.srcElement).position()
+					$("#job-form").dialog({position:[pos.left+200, pos.top-50]}).dialog("open");
+					return false;
+				},
+                
 				//template: Handlebars.compile($('#job-row').html()),
 				add: function(m){
 					var view = new JobView({model: m});
-					$(this.el).append(m, view.render().el);
-					console.log(this.el);
+					this.$table.append(m, view.render().el);
 				},
 				addAll: function(e){ //gets fired after fetch()
 					//var $el = $(this.el);
+                    this.$table.html('');
 					var _this = this; //needed to use this because scope changes
 					this.list.each(function(m){
 						_this.add(m);
@@ -171,14 +233,15 @@
 					$el.html('');
 					$el.append(m, m.render().el);
 					return this;*/
-					console.log('rendering job list view');
+					//console.log('rendering job list view');
+                    this.list.fetch();
 				}
 			});
 			
 			var FileView = Backbone.View.extend({
 				tagName: "li",
 				
-				template: Handlebars.compile($('#job-row').html()),
+				template: Handlebars.compile($('#file-row').html()),
 				
 				events: {
 					"click .view":		"view",
@@ -196,32 +259,77 @@
 				
 				render: function() {
 					var $el = $(this.el);
+					//console.log(this.model.toJSON());
 					$el.html(this.template(this.model.toJSON()));
 					return this;
 				}
 			});
+            
+            /*var FileFormView = Backbone.View.extend({
+				tagName: "div",
+				
+				template: Handlebars.compile($('#file-form-template').html()),
+				
+				events: {
+					"click .open": "form",
+				},
+				
+				form: function(){
+					var pos = $(e.srcElement).position();
+					$("#file-form").dialog({position:[pos.left+200, pos.top-50]}).dialog("open");
+					return false;
+				},
+				
+				render: function() {
+					var $el = $(this.el);
+					//console.log(this.model.toJSON());
+					$el.html(this.template());
+					return this;
+				}
+			});*/
 			
 			var FileListView = Backbone.View.extend({
-				tagName: "ul",
-				className: "table",
+				/*tagName: "ul",
+				className: "table",*/
+				tagName: 'div',
 				//id: "manager-table",
 				//el: '<ul id="manager-table"></ul>',
 				
 				initialize: function(){
-					files.bind('add',	 this.add, this);
-					files.bind('reset', this.addAll, this);
+					this.list = new FileList;
+					this.list.bind('add',	 this.add, this);
+					this.list.bind('reset', this.addAll, this);
+					this.list.fetch();
+					var $el = $(this.el);
+					$el.append('<h2>Files</h2>').append('<a id="add-file" href="#" class="add button">Add a new File</a>');
+                    this.$table = $('<ul class="table"></ul>').appendTo($el);
+					
 					//list.bind('all',	 this.render, this);
 				},
+				
+				events: {
+					"click #add-file":		"form",
+					//"click .pause":		"pause",
+					//"click .stop":		"stop",
+					//"click .restart":	"restart",
+				},
+				
+				form: function(e){
+                    var pos = $(e.srcElement).position()
+					$("#file-form").dialog({position:[pos.left+200, pos.top-50]}).dialog("open");
+					return false;
+				},
+				
 				//template: Handlebars.compile($('#job-row').html()),
 				add: function(m){
-					var view = new JobView({model: m});
-					$(this.el).append(m, view.render().el);
-					console.log(this.el);
+					var view = new FileView({model: m});
+					this.$table.append(m, view.render().el);
 				},
 				addAll: function(e){ //gets fired after fetch()
 					//var $el = $(this.el);
+                    this.$table.html('');
 					var _this = this;
-					files.each(function(m){
+					this.list.each(function(m){
 						_this.add(m);
 					}); //attaches a view to each of the models
 					//console.log(e, "reset");
@@ -231,17 +339,18 @@
 					$el.html('');
 					$el.append(m, m.render().el);
 					return this;*/
-					console.log('rendering job list view');
+					//console.log('rendering job list view');
+                    this.list.fetch();
 				}
-			});			
+			});		
 			
-			var list = new JobList;
-			var files = new FileList;
+			//var list = new JobList;
+			//var files = new FileList;
 			
 			var App = Backbone.View.extend({
-				//el: $('#app'),
-				tagName: 'div',
-				id: 'app',
+				el: $('#app'),
+				//tagName: 'div',
+				//id: 'app',
 				/*el:'<div id="app">'
 						+'<a href="#" class="add button">Add an item</a><br>'
 						+'<div id="img"></div>'
@@ -249,8 +358,11 @@
 				
 				initialize: function(){
 					var $el = $(this.el);
-					this.jobs = new JobListView;
-					$el.append('<h2>Jobs</h2>').append(this.jobs.el);
+					this.jobs = new JobListView({el:$('#jobs', $el)});
+					this.files = new FileListView({el:$('#files', $el)});
+					/*$el	.append(this.jobs.el)
+						.append(this.files.el)
+						.append('<div id="img"></div>');*/
 				},
 				
 				render: function(){
@@ -260,47 +372,96 @@
 			
 			var app = new App;
 			//var jobsview = new JobListView;
-			$(app.el).appendTo('body');
+			$(app.el).appendTo('#content-main');
 			
-			list.fetch(); //does an ajax request to fill up the JobList
-			files.fetch();
+			//list.fetch(); //does an ajax request to fill up the JobList
+			//files.fetch();
 			
 			//list.add({{bootstrap}});
-			
-			$("#manager-table").sortable();//{placeholder: "ui-state-highlight"}
-			$("#manager-table").disableSelection();
-			
-			$('#job_upload_frame').load(function(e){
-				var state = $.parseJSON(this.contentWindow.document.body.innerHTML)
-				console.log('loaded', state);
+			/*make tables sortable...*/
+            
+			$("ul.table").disableSelection().sortable();//{placeholder: "ui-state-highlight"}
+            
+            /* manage forms */
+			var $file_form = $("#file-form");
+            $file_form.dialog({autoOpen: false, height:200, width:450});
+            $('form', $file_form).live("submit", function(){
+                //$(this).clear_form();
+                $job_form.dialog('hide');
+            });
+            //This iframe is used to upload a file in the background since you can't use $.ajax() for this.
+			$('iframe', $file_form).load(function(e){
+				var content = this.contentWindow.document.body.innerHTML
+				if (content){
+					var state = $.parseJSON(this.contentWindow.document.body.innerHTML)
+					console.log('loaded', state);
+					if (state.status == "success"){
+						//alert("Upload successful!");
+                        app.files.render();
+					}else{
+						alert("There was a problem, error information available...");
+					}
+				}
 			});
-			$("#job_upload_form").live("submit", function(){
-				//console.log($(this).serialize());
-				//return false;
-			});
-			
+            
+            var $job_form = $("#job-form");
+			$job_form.dialog({autoOpen: false, height:200, width:450});
+            $('form', $job_form).live("submit", function(){
+                var data = $(this).serialize();
+                $(this).clear_form();
+                $job_form.dialog('hide');
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: data,
+                    dataType: 'text',
+                    success: function(state){
+                        console.log('loaded', state);
+                        /*if (state.status == "success"){
+                            //alert("Form submission successful!");
+                            app.jobs.render();
+                        }else{
+                            alert("There was a problem, error information available...");
+                        }*/
+                    }
+                });
+                return false;
+            });
+			//$("#file-form").dialog("open");
 		});
 	</script>
 {% endblock %}
 
 {% block content %}
-	<!--<div id="app">
-		<a href="#" class="add button">Add an item</a><br>
+	<div id="app">
+		<div id="jobs"></div>
+		<div id="files"></div>
+		<!--<a id="add-job" href="#" class="add button">Add a new Job</a><br>
+		<a id="add-file" href="#" class="add button">Add a new File</a><br>-->
 		<div id="img"></div>
-		<ul id="manager-table"></ul>
-	</div>-->
+	</div>	
+	
 	<!--<a href="/manager/upload" class="load button">Upload New Job</a>-->
-	<div id="upload-form">
+	<div id="file-form" title="Upload a file">
 		<iframe id="job_upload_frame" name="job_upload_frame" style="position:absolute; top:-9999px; left:-9999px;visibility:hidden;"></iframe>
-		<!--<iframe id="job_upload_frame" name="job_upload_frame" style="height:250px;width:250px;position:absolute;top:0;right:0;"></iframe>-->
-		<form id="job_upload_form" enctype="multipart/form-data" method="post" action="/manager/upload" target="job_upload_frame">
+		<form id="job_upload_form" enctype="multipart/form-data" method="post" action="/manager/new/file" target="job_upload_frame">
 			<table>
 			{% csrf_token %}
-			{{ form }}
+			{{ file_form }}
 			</table>
 			<input type="submit" value="Save" id="save_button"/>
 		</form>
 	</div>
+	<div id="job-form" title="Create a new job">
+		<form id="job_upload_form" method="post" action="/manager/new/job">
+			<table>
+			{% csrf_token %}
+			{{ job_form }}
+			</table>
+			<input type="submit" value="Save" id="save_button"/>
+		</form>	
+	</div>
+
 {% endblock %}
 
 {% block footer %}

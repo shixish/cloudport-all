@@ -9,7 +9,7 @@ import os #for directory listing
 
 from cloudport.job_manager.forms import * #lets me use the forms i added in the forms file
 from cloudport.job_manager.models import * #lets me use models...
-
+import json
 
 from django.core import serializers
 def req_data(request):
@@ -18,7 +18,7 @@ def req_data(request):
     #job1 = Job(date=date.today(), title="Test 1", status=0)
     #job1.save()
     
-    import json
+    
     jobs = Job.objects.all()
     #return HttpResponse(jobs)
     return HttpResponse(serializers.serialize('json', jobs))
@@ -32,21 +32,28 @@ def success(request, title):
     return HttpResponse("The file upload appears to have gone smoothly. <br> <a href=\"/manager/\">go back to manager</a>")
 
 @login_required()
-def upload_job(request):
+def new_job(request):
     if request.method == 'POST':
+        stuff = json.dumps(request);
+        return HttpResponse(errors)
         form = JobForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
-    else:
-        form = JobForm()
-    c = RequestContext(request)
-    c.update(csrf(request))
-    return render_to_response('job_manager/jobform.html', {'form': form}, c)
+            #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
+            return HttpResponse('{"status":"success"}')
+        else:
+            errors = json.dumps(form.errors);
+            return HttpResponse('{"status":"fail", "errors":'+errors+'}')
+    #else:
+    #    form = JobForm()
+    #c = RequestContext(request)
+    #c.update(csrf(request))
+    #return render_to_response('job_manager/jobform.html', {'form': form}, c)
+    return HttpResponse('{"status":"fail", "error":"No data"}')
 
 from django.forms.util import ErrorList
 @login_required()
-def upload_file(request):
+def new_file(request):
     if request.method == 'POST':
         form = DataFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -54,12 +61,12 @@ def upload_file(request):
             #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
             return HttpResponse('{"status":"success"}')
         else:
-            errors = ''.join(['{'+','.join([u'"%s":"%s"'%(e, i) for i in form.errors[e]])+'}' for e in form.errors])
+            errors = json.dumps(form.errors);
             return HttpResponse('{"status":"fail", "errors":'+errors+'}')
     #else:
         #form = JobForm()
-    c = RequestContext(request)
-    c.update(csrf(request))
+    #c = RequestContext(request)
+    #c.update(csrf(request))
     return HttpResponse('{"status":"fail", "error":"No data"}')
 
 #def get_job_list():
@@ -85,7 +92,7 @@ def upload_file(request):
 #        #return HttpResponse(serializers.serialize('json', Job.objects.all()))
 #        return HttpResponse(json.dumps(get_job_list()))
 
-#To do with the RESTful API:
+##To do with the RESTful API:
 #from djangorestframework.resources import ModelResource
 #from djangorestframework.views import ListOrCreateModelView, InstanceModelView, ListModelView
 #from djangorestframework import permissions, authentication
@@ -100,5 +107,5 @@ def manager(request):
     #return render_to_response('job_manager/manager.html', {"items":items}, context_instance=RequestContext(request))
     c = RequestContext(request)
     c.update(csrf(request))
-    return render_to_response('job_manager/manager.html', {'form':DataFileForm(), 'bootstrap':'TODO'}, c)
+    return render_to_response('job_manager/manager.html', {'file_form':DataFileForm(), 'job_form':JobForm(), 'bootstrap':'TODO'}, c)
 

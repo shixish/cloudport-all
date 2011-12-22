@@ -3,17 +3,23 @@ from django import forms
 #from cloudport import settings
 from cloudport.settings import TASK_UPLOAD_FILE_EXTENSIONS
 from cloudport.settings import TASK_UPLOAD_FILE_MAX_SIZE
-
+from django.contrib.auth.models import User
 import json
 
-#from django.core.files.storage import FileSystemStorage
-#fs = FileSystemStorage(location='/home/jobsd')
+from django.core.files.storage import FileSystemStorage
+fs = FileSystemStorage(location='/var/www-django/media/users')
 
 #class Car(models.Model):
 #    photo = models.ImageField(storage=fs)
 
 class DataFile(models.Model):
-    file = models.FileField(upload_to="JOB_UPLOADS")
+    creator = models.ForeignKey(User, related_name='file_creator')
+    created_on = models.DateTimeField(auto_now_add = True)
+    editor  = models.ForeignKey(User, related_name='file_editor')
+    edited_on  = models.DateTimeField(auto_now = True)
+    
+    file = models.FileField(upload_to="default", storage=fs)
+    #file = models.FileField(upload_to="JOB_UPLOADS")
     #file = models.FileField(upload_to="jobs_uploads ", storage=fs)
     
 class DataFileForm(forms.ModelForm):
@@ -43,8 +49,11 @@ class DataFileForm(forms.ModelForm):
         return file
 
 class Job(models.Model):
-    date_published = models.DateTimeField('date published', auto_now_add=True)
-    date_updated = models.DateTimeField('date updated', auto_now=True)
+    creator = models.ForeignKey(User, related_name='job_creator')
+    created_on = models.DateTimeField(auto_now_add = True)
+    editor  = models.ForeignKey(User, related_name='job_editor')
+    edited_on  = models.DateTimeField(auto_now = True)
+
     status = models.IntegerField(editable=False, default=0)
     title = models.CharField(max_length = 100)
     output = models.CharField(editable=False, max_length = 100)

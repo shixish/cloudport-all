@@ -10,9 +10,33 @@ from djangorestframework import permissions, authentication
 
 class Jobs(ModelResource):
     model = Job
+    exclude = ('id', 'pk', 'creator', 'editor')
+    include = None
     
 class DataFiles(ModelResource):
     model = DataFile
+    exclude = ('id', 'pk', 'creator', 'editor')
+    include = None
+    
+    #def get(self, request, auth, *args, **kwargs):
+    #    try:
+    #        if args:
+    #            # If we have any none kwargs then assume the last represents the primrary key
+    #            instance = self.model.objects.get(pk=args[-1], **kwargs)
+    #        else:
+    #            # Otherwise assume the kwargs uniquely identify the model
+    #            instance = self.model.objects.get(**kwargs)
+    #    except self.model.DoesNotExist:
+    #        raise ResponseException(status.HTTP_404_NOT_FOUND)
+    #
+    #    return instance
+    
+#class MockView(View):
+#            permissions = ()
+#            form = FileForm
+#            def post(self, request, *args, **kwargs):
+#                return {'FILE_NAME': self.CONTENT['file'].name,
+#                        'FILE_CONTENT': self.CONTENT['file'].read()}
 
 urlpatterns = patterns('',
     url(r'^job/$', ListOrCreateModelView.as_view(resource=Jobs, permissions=(permissions.IsAuthenticated,))),
