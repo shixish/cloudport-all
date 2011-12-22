@@ -34,9 +34,11 @@ def success(request, title):
 @login_required()
 def new_job(request):
     if request.method == 'POST':
-        stuff = json.dumps(request);
-        return HttpResponse(errors)
-        form = JobForm(request.POST, request.FILES)
+        post = request.POST.copy() 
+        post['creator'] = request.user.id
+        post['editor'] = request.user.id
+        
+        form = JobForm(post, request.FILES)
         if form.is_valid():
             form.save()
             #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
@@ -51,11 +53,17 @@ def new_job(request):
     #return render_to_response('job_manager/jobform.html', {'form': form}, c)
     return HttpResponse('{"status":"fail", "error":"No data"}')
 
+#'check_password', 'clean', 'clean_fields', 'date_error_message', 'date_joined', 'delete', 'email', 'email_user', 'file_creator', 'file_editor', 'first_name', 'full_clean', 'get_absolute_url', 'get_all_permissions', 'get_and_delete_messages', 'get_full_name', 'get_group_permissions', 'get_next_by_date_joined', 'get_next_by_last_login', 'get_previous_by_date_joined', 'get_previous_by_last_login', 'get_profile', 'groups', 'has_module_perms', 'has_perm', 'has_perms', 'has_usable_password', 'id', 'is_active', 'is_anonymous', 'is_authenticated', 'is_staff', 'is_superuser', 'job_creator', 'job_editor', 'last_login', 'last_name', 'logentry_set', 'message_set', 'objects', 'password', 'pk', 'prepare_database_save', 'save', 'save_base', 'serializable_value', 'set_password', 'set_unusable_password', 'unique_error_message', 'user_permissions', 'username', 'validate_unique']
+
 from django.forms.util import ErrorList
 @login_required()
 def new_file(request):
     if request.method == 'POST':
-        form = DataFileForm(request.POST, request.FILES)
+        post = request.POST.copy() 
+        post['creator'] = request.user.id
+        post['editor'] = request.user.id
+        
+        form = DataFileForm(post, request.FILES)
         if form.is_valid():
             form.save()
             #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])

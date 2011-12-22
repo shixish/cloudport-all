@@ -25,6 +25,7 @@ class DataFile(models.Model):
 class DataFileForm(forms.ModelForm):
     class Meta:
         model = DataFile
+        exclude = ('creator','editor')
     
     def clean_file(self):
         file = self.cleaned_data['file']
@@ -65,3 +66,4 @@ class Job(models.Model):
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
+        exclude = ('creator','editor')
