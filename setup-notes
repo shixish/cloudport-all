@@ -11,3 +11,11 @@ This works for files and directories i create locally, but though ftp it's
 Editing /usr/lib/openssh/sftp-server
 replaced:	Subsystem sftp /usr/lib/openssh/sftp-server
 with:		Subsystem sftp /usr/lib/openssh/sftp-server -u 0002
+
+
+Several things to install...
+sudo pip install django_compressor
+sudo pip install djangorestframework
+sudo pip install django-grappelli
+sudo pip install PIL
+sudo pip install django-filebrowser

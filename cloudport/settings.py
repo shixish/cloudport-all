@@ -12,6 +12,10 @@ MEDIA_ROOT = '/var/www-django/media/'
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
+#FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
+#
+#FILEBROWSER_DIRECTORY = MEDIA_ROOT
+
 STATICFILES_DIRS = (
     #"/var/www-django/cloudport/static",
     #"/home/polls.com/polls/static",
@@ -65,6 +69,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     #'django.contrib.sites',
     #'django.contrib.messages',
+    'grappelli', #install: "pip install django-grappelli", this is a skin for the admin interface.
+    #'filebrowser', #install: "pip install django-filebrowser", needs grappelli and PIL, gives file browser in admin interface.
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -92,4 +98,6 @@ COMPRESS_ENABLED = True
 TASK_UPLOAD_FILE_EXTENSIONS = ['sce']
 #TASK_UPLOAD_FILE_TYPES = ['pdf', 'vnd.oasis.opendocument.text','vnd.ms-excel','msword','application',]
 TASK_UPLOAD_FILE_MAX_SIZE = "5242880"
+
+ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
 

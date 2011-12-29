@@ -5,7 +5,7 @@ from django.template.defaultfilters import filesizeformat
 from django.conf import settings
 
 class UploadFileForm(forms.Form):
-    title = forms.CharField(max_length=50)
+    #title = forms.CharField(max_length=50)
     file = forms.FileField()
     
     def clean_file(self):
