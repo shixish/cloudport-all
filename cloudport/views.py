@@ -1,10 +1,7 @@
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
+#from django.conf.urls import patterns, include, url
 
-import datetime
-def time(request):
-    now = datetime.datetime.now()
-    html = "<html><body>Hi everybody this the time and date today: %s</body>" %now
-    return HttpResponse(html);
-
-def test_date(request):
-    return HttpResponse("hiiiiiiiiii")
+def index(request):
+    return render_to_response('index.html')

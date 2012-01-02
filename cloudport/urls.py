@@ -34,5 +34,6 @@ urlpatterns = patterns('',
     
     #(r'^favicon.ico', HttpResponseRedirect('/manager/success/')),
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
-    (r'^', 'cloudport.default.views.index'),
+    (r'^$', 'cloudport.views.index'),
+    #(r'^', 'cloudport.default.views.index'),
 )

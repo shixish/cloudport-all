@@ -81,7 +81,6 @@ INSTALLED_APPS = (
     'compressor', #installed using "pip install django_compressor"
     'cloudport.polls',
     'cloudport.job_manager',
-    'cloudport.default',
     'cloudport.templates', #needed to do this to make the templatetags work...
 )
 
