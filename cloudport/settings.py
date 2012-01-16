@@ -79,6 +79,7 @@ INSTALLED_APPS = (
     'djangorestframework', #i installed this library using "sudo pip install djangorestframework"
     #'less', #installed using "sudo pip install django-less"
     'compressor', #installed using "pip install django_compressor"
+    'tastypie',
     'cloudport.polls',
     'cloudport.job_manager',
     'cloudport.templates', #needed to do this to make the templatetags work...

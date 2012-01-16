@@ -19,8 +19,9 @@ class UploadFileForm(forms.Form):
                 raise forms.ValidationError('File type is not supported, a file extention is required.')
             extension = extension.pop()
 
-            if extension not in settings.TASK_UPLOAD_FILE_EXTENSIONS:
-                raise forms.ValidationError('File extension is not supported (%s)'%extension)
+            #We dont need to block file extensions anymore
+            #if extension not in settings.TASK_UPLOAD_FILE_EXTENSIONS:
+            #    raise forms.ValidationError('File extension is not supported (%s)'%extension)
             
             #if file_type not in settings.TASK_UPLOAD_FILE_TYPES:
             #    raise forms.ValidationError('File type is not supported (%s)'%file.content_type

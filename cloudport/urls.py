@@ -11,6 +11,14 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 admin.autodiscover()
 
+#tastypie
+from cloudport.api import JobResource, UserResource
+from tastypie.api import Api
+
+v1_api = Api(api_name='v1')
+v1_api.register(UserResource())
+v1_api.register(JobResource())
+
 urlpatterns = patterns('',
     (r'^grappelli/', include('grappelli.urls')),
     #url(r'^admin/filebrowser/', include(site.urls)),
@@ -29,6 +37,7 @@ urlpatterns = patterns('',
     #(r'^static/(?P<path>.*)$', 'django.contrib.staticfiles.views'), #probably doesn't do anything
     #(r'^jobs_finished/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/jobs_dispatcher/jobs_finished/', 'show_indexes':True}),
     (r'^rest/', include('cloudport.rest.urls')),
+    (r'^api/', include(v1_api.urls)),
     (r'^grappelli/', include('grappelli.urls')),
     
     

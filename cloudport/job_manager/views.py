@@ -38,11 +38,13 @@ def success(request, title):
 @login_required()
 def new_job(request):
     if request.method == 'POST':
-        post = request.POST.copy() 
-        post['creator'] = request.user.id
-        post['editor'] = request.user.id
+        #post = request.POST.copy() 
+        #post['creator'] = request.user.id
+        #post['editor'] = request.user.id
         
-        form = JobForm(post, request.FILES)
+        form = JobForm(request.POST, request.FILES)
+        form.cleaned_data['creator'] = request.user.id
+        form.cleaned_data['editor'] = request.user.id
         if form.is_valid():
             form.save()
             #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
