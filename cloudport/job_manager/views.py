@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required #provides the @login_r
 
 
 from cloudport.settings import MEDIA_ROOT
+from cloudport.settings import TASK_UPLOAD_FILE_EXTENSIONS
 from cloudport.job_manager.forms import * #lets me use the forms i added in the forms file
 from cloudport.job_manager.models import * #lets me use models...
 
@@ -113,32 +114,6 @@ def handle_uploaded_file(request, f):
     else:
         return HttpResponse('{"status":"fail", "error":"Unable to upload file. Bad directory."}')
 
-
-def humanize_bytes(bytes, precision=1):
-    abbrevs = (
-        (1<<50L, 'PB'),
-        (1<<40L, 'TB'),
-        (1<<30L, 'GB'),
-        (1<<20L, 'MB'),
-        (1<<10L, 'kB'),
-        (1, 'bytes')
-    )
-    if bytes == 1:
-        return '1 byte'
-    for factor, suffix in abbrevs:
-        if bytes >= factor:
-            break
-    return '%.*f %s' % (precision, bytes / factor, suffix)
-
-def format_files(directory, path):
-    s = os.stat(directory+path)
-    return {
-        'name':path,
-        'modified':datetime.fromtimestamp(s.st_mtime).strftime('%Y-%m-%d %I:%M %p'),
-        'mtime':s.st_mtime,
-        'size':humanize_bytes(s.st_size)
-    }
-
 @login_required()
 def get_user_files(request):
     directory = MEDIA_ROOT+'users/'+str(request.user.id)+'/'
@@ -160,3 +135,32 @@ def manager(request):
     c.update(csrf(request))
     return render_to_response('job_manager/manager.html', {'file_form':UploadFileForm(), 'job_form':JobForm(), 'bootstrap':'TODO'}, c)
 
+
+def humanize_bytes(bytes, precision=1):
+    abbrevs = (
+        (1<<50L, 'PB'),
+        (1<<40L, 'TB'),
+        (1<<30L, 'GB'),
+        (1<<20L, 'MB'),
+        (1<<10L, 'kB'),
+        (1, 'bytes')
+    )
+    if bytes == 1:
+        return '1 byte'
+    for factor, suffix in abbrevs:
+        if bytes >= factor:
+            break
+    return '%.*f %s' % (precision, bytes / factor, suffix)
+
+def format_files(directory, path):
+    s = os.stat(directory+path)
+    ext = os.path.splitext(path)[1][1:]
+    exe = True if ext in TASK_UPLOAD_FILE_EXTENSIONS else False
+    return {
+        'name':path,
+        'modified':datetime.fromtimestamp(s.st_mtime).strftime('%Y-%m-%d %I:%M %p'),
+        'mtime':s.st_mtime,
+        'size':humanize_bytes(s.st_size),
+        'ext':ext,
+        'exe':exe
+    }

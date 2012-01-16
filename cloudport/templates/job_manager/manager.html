@@ -21,14 +21,16 @@
 		</span>
 	</script>
 	<script id="file-row" type="text/x-handlebars-template">
-        <div style="position:absolute;margin-left:160px;line-height:1.6em;">
+        <div class="info">
             <strong>Size:</strong> {{size}}<br>
             <strong>Modified:</strong> {{modified}}
         </div>
-		<input type="checkbox" />
         <strong>{{name}}</strong>
 		<span class="controls">
-			<a href="/media/{{name}}" class="save button">Download</a>
+			{{#if exe}}
+			<a href="#" class="line button">Run</a>
+			{{/if}}
+			<a href="/media/{{name}}" class="save button" alt="download">Download</a>
 		</span>
 	</script>
 	<!--<script id="job-rows" type="text/x-handlebars-template">
@@ -201,7 +203,7 @@
 					this.list.fetch();
 					//$(this.el).append('<ul class="table"></ul>');
                     var $el = $(this.el);
-					$el.append('<h2>Jobs</h2>').append('<a id="add-job" href="#" class="add button">Add a new Job</a>');
+					$el.append('<h2>Jobs</h2>');//.append('<a id="add-job" href="#" class="add button">Add a new Job</a>');
 					this.$table = $('<ul class="table"></ul>').appendTo($el);
 					//list.bind('all',	 this.render, this);
 				},
@@ -393,10 +395,11 @@
             $file_form.dialog({autoOpen: false, height:200, width:450});
             $('form', $file_form).live("submit", function(){
                 //$(this).clear_form();
-                $job_form.dialog('hide');
+                $file_form.dialog('close');
             });
             //This iframe is used to upload a file in the background since you can't use $.ajax() for this.
 			$('iframe', $file_form).load(function(e){
+				console.log('2');
 				var content = this.contentWindow.document.body.innerHTML
 				if (content){
 					var state = $.parseJSON(this.contentWindow.document.body.innerHTML)
@@ -415,7 +418,7 @@
             $('form', $job_form).live("submit", function(){
                 var data = $(this).serialize();
                 $(this).clear_form();
-                $job_form.dialog('hide');
+                $job_form.dialog('close');
                 $.ajax({
                     type: 'POST',
                     url: $(this).attr('action'),

@@ -95,7 +95,7 @@ COMPRESS_PRECOMPILERS = (
 )
 COMPRESS_ENABLED = True
 
-TASK_UPLOAD_FILE_EXTENSIONS = ['sce']
+TASK_UPLOAD_FILE_EXTENSIONS = ['sce', 'py']
 #TASK_UPLOAD_FILE_TYPES = ['pdf', 'vnd.oasis.opendocument.text','vnd.ms-excel','msword','application',]
 TASK_UPLOAD_FILE_MAX_SIZE = "5242880"
 
