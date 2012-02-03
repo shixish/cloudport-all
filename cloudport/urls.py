@@ -31,7 +31,6 @@ urlpatterns = patterns('',
     
     #(r'^test/', include('default.views.index')),#include('cloudport.index')),
     #(r'^$', 'direct_to_template', {'template': 'index.html'}),
-    #(r'^time/','cloudport.polls.views.time'),
     (r'^manager/', include('cloudport.job_manager.urls')),
     (r'^media/get/(?P<path>.*)', 'cloudport.job_manager.views.download'),
     #(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/cloudport/static', 'show_indexes':True}),
