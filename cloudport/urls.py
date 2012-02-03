@@ -31,8 +31,9 @@ urlpatterns = patterns('',
     
     #(r'^test/', include('default.views.index')),#include('cloudport.index')),
     #(r'^$', 'direct_to_template', {'template': 'index.html'}),
-    (r'^time/','cloudport.polls.views.time'),
+    #(r'^time/','cloudport.polls.views.time'),
     (r'^manager/', include('cloudport.job_manager.urls')),
+    (r'^media/get/(?P<path>.*)', 'cloudport.job_manager.views.download'),
     #(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/cloudport/static', 'show_indexes':True}),
     #(r'^static/(?P<path>.*)$', 'django.contrib.staticfiles.views'), #probably doesn't do anything
     #(r'^jobs_finished/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/jobs_dispatcher/jobs_finished/', 'show_indexes':True}),
@@ -43,6 +44,7 @@ urlpatterns = patterns('',
     
     #(r'^favicon.ico', HttpResponseRedirect('/manager/success/')),
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
+    url("", include("django_socketio.urls")),
     (r'^$', 'cloudport.views.index'),
     #(r'^', 'cloudport.default.views.index'),
 )

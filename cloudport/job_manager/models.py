@@ -53,12 +53,12 @@ class Job(models.Model):
     edited_on  = models.DateTimeField(auto_now = True)
 
     status = models.IntegerField(editable=False, default=0)
-    title = models.CharField(max_length = 100)
+    filename = models.CharField(max_length = 100)
     output = models.CharField(editable=False, max_length = 100)
     #file = models.FileField(upload_to="JOB_UPLOADS")
     
     def __unicode__(self):
-        return self.title
+        return self.filename
     
 class JobForm(forms.ModelForm):
     class Meta:

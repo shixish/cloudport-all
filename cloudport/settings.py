@@ -80,9 +80,11 @@ INSTALLED_APPS = (
     #'less', #installed using "sudo pip install django-less"
     'compressor', #installed using "pip install django_compressor"
     'tastypie',
-    'cloudport.polls',
+    #'cloudport.polls',
     'cloudport.job_manager',
     'cloudport.templates', #needed to do this to make the templatetags work...
+    'django_socketio',
+    #'django_socketio.templatetags',
 )
 
 LESS_EXECUTABLE = 'lessc'

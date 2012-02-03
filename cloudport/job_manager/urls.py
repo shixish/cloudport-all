@@ -3,7 +3,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     #(r'^$', 'direct_to_template', {'template': 'index.html'}),
-    (r'^req', 'cloudport.job_manager.views.req_data'),
+    (r'^test', 'cloudport.job_manager.views.req_data'),
     (r'^files', 'cloudport.job_manager.views.get_user_files'),
     #(r'^test', 'cloudport.job_manager.views.testing'),
     #(r'^get/(.*)', 'cloudport.job_manager.views.get'),

@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 {% load verbatim %}
+{% load socketio_tags %}
+
 
 {% block title %}Manager{% endblock %}
 
 {% block head %}
+	{% comment %}{% socketio %}{% endcomment %}
+	{% socketio %}
 	{% verbatim %}
 	<script id="job-row" type="text/x-handlebars-template">
 		<strong>{{title}}</strong>
@@ -25,12 +29,12 @@
             <strong>Size:</strong> {{size}}<br>
             <strong>Modified:</strong> {{modified}}
         </div>
-        <strong>{{name}}</strong>
+        <strong>{{filename}}</strong>
 		<span class="controls">
 			{{#if exe}}
-			<a href="#" class="line button">Run</a>
+			<a href="#" class="line button run">Run</a>
 			{{/if}}
-			<a href="/media/{{name}}" class="save button" alt="download">Download</a>
+			<a href="/media/get/{{name}}" class="save button download">Download</a>
 		</span>
 	</script>
 	<!--<script id="job-rows" type="text/x-handlebars-template">
@@ -67,23 +71,64 @@
         </div>
     </script>-->
 	<script type="text/javascript">
-        $.fn.clear_form = function(){
-            $(this).find(':input').each(function() {
-                switch(this.type) {
-                    case 'password':
-                    case 'select-multiple':
-                    case 'select-one':
-                    case 'text':
-                    case 'textarea':
-                        $(this).val('');
-                        break;
-                    case 'checkbox':
-                    case 'radio':
-                        this.checked = false;
-                }
-            });
-        }
+		//
+		//var socket = new io.Socket();
+		//socket.connect();
+		//socket.on('connect', function() {
+		//	console.log('connected!');
+		//	socket.send('hello!');
+		//	/*socket.subscribe('room-' + window.room);
+		//	showForm();*/
+		//});
+		//
+		//socket.on('message', function(data) {
+		//	console.log(data);
+		//	/*switch (data.action) {
+		//		case 'in-use':
+		//			alert('Name is in use, please choose another');
+		//			break;
+		//		case 'started':
+		//			started = true;
+		//			$('#submit').val('Send');
+		//			$('#users').slideDown();
+		//			$.each(data.users, function(i, name) {
+		//				addUser({name: name});
+		//			});
+		//			break;
+		//		case 'join':
+		//			addUser(data, true);
+		//			break;
+		//		case 'leave':
+		//			removeUser(data);
+		//			break;
+		//		case 'message':
+		//			addMessage(data);
+		//			break;
+		//		case 'system':
+		//			data['name'] = 'SYSTEM';
+		//			addMessage(data);
+		//			break;
+		//	}*/
+		//});
+		$.fn.clear_form = function(){
+			$(this).find(':input').each(function() {
+				switch(this.type) {
+					case 'password':
+					case 'select-multiple':
+					case 'select-one':
+					case 'text':
+					case 'textarea':
+						$(this).val('');
+						break;
+					case 'checkbox':
+					case 'radio':
+						this.checked = false;
+				}
+			});
+		}
 		$(function(){
+			var CSRF_TOKEN = "{% csrf_token %}";
+			var POST_DATA = {'csrfmiddlewaretoken':$('input', CSRF_TOKEN).attr('value')};
 			/*var Workspace = Backbone.Router.extend({
 				routes: {
 					"help":								 "help",		// #help
@@ -252,9 +297,25 @@
 				
 				events: {
 					"click .view":		"view",
+					"click .download":	"download",
+					"click .run":		"run"
 					//"click .pause":		"pause",
 					//"click .stop":		"stop",
 					//"click .restart":	"restart",
+				},
+				
+				download: function(){
+					console.log('download', this.model.get('filename'), this.model.get('ext'));
+					return false;
+				},
+				
+				run: function(e){
+					var post = jQuery.extend({'filename':this.model.get('filename')}, POST_DATA);
+					console.log(this.model.toJSON(), post);
+					$.post('new_job', post, function(d){
+						console.log(d);
+					});
+					return false;
 				},
 				
 				view: function(){
@@ -316,7 +377,7 @@
 				},
 				
 				events: {
-					"click #add-file":		"form",
+					"click #add-file":	"form",
 					//"click .pause":		"pause",
 					//"click .stop":		"stop",
 					//"click .restart":	"restart",
@@ -399,16 +460,16 @@
             });
             //This iframe is used to upload a file in the background since you can't use $.ajax() for this.
 			$('iframe', $file_form).load(function(e){
-				console.log('2');
 				var content = this.contentWindow.document.body.innerHTML
 				if (content){
 					var state = $.parseJSON(this.contentWindow.document.body.innerHTML)
-					console.log('loaded', state);
+					//console.log('loaded', state);
 					if (state.status == "success"){
 						//alert("Upload successful!");
                         app.files.render();
 					}else{
-						alert("There was a problem, error information available...");
+						alert("Error! Please select a valid file.");
+						console.log('error', state);
 					}
 				}
 			});
@@ -443,8 +504,8 @@
 
 {% block content %}
 	<div id="app">
-		<div id="jobs"></div>
 		<div id="files"></div>
+		<div id="jobs"></div>
 		<!--<a id="add-job" href="#" class="add button">Add a new Job</a><br>
 		<a id="add-file" href="#" class="add button">Add a new File</a><br>-->
 		<div id="img"></div>

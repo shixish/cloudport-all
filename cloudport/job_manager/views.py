@@ -1,16 +1,19 @@
 # Create your views here.
 from django.http import HttpResponse #for direct html output
 from django.http import HttpResponseRedirect #for redirecting the browser
+from django.http import Http404
 from django.core.context_processors import csrf #needed for file upload
 from django.shortcuts import render_to_response #implements a template file
 from django.template import RequestContext #provides some extra variables to my templates
 from django.contrib.auth.decorators import login_required #provides the @login_required() syntax
 
-
 from cloudport.settings import MEDIA_ROOT
 from cloudport.settings import TASK_UPLOAD_FILE_EXTENSIONS
 from cloudport.job_manager.forms import * #lets me use the forms i added in the forms file
 from cloudport.job_manager.models import * #lets me use models...
+
+from django.contrib.auth.decorators import user_passes_test
+from django_socketio import events, broadcast, broadcast_channel, NoSocket
 
 import os #for directory listing
 import json
@@ -22,7 +25,6 @@ def req_data(request):
     #import time
     #job1 = Job(date=date.today(), title="Test 1", status=0)
     #job1.save()
-    
     
     jobs = Job.objects.all()
     #return HttpResponse(jobs)
@@ -36,6 +38,30 @@ def req_data(request):
 def success(request, title):
     return HttpResponse("The file upload appears to have gone smoothly. <br> <a href=\"/manager/\">go back to manager</a>")
 
+#@login_required()
+#def new_job(request):
+#    if request.method == 'POST':
+#        #post = request.POST.copy() 
+#        #post['creator'] = request.user.id
+#        #post['editor'] = request.user.id
+#        
+#        form = JobForm(request.POST, request.FILES)
+#        form.cleaned_data['creator'] = request.user.id
+#        form.cleaned_data['editor'] = request.user.id
+#        if form.is_valid():
+#            form.save()
+#            #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
+#            return HttpResponse('{"status":"success"}')
+#        else:
+#            errors = json.dumps(form.errors);
+#            return HttpResponse('{"status":"fail", "errors":'+errors+'}')
+#    #else:
+#    #    form = JobForm()
+#    #c = RequestContext(request)
+#    #c.update(csrf(request))
+#    #return render_to_response('job_manager/jobform.html', {'form': form}, c)
+#    return HttpResponse('{"status":"fail", "error":"No data"}')
+    
 @login_required()
 def new_job(request):
     if request.method == 'POST':
@@ -127,6 +153,20 @@ def get_user_files(request):
     else:
         return HttpResponse('[]')
 
+#it appears that this is a bad way of doing this, but should work for now.
+@login_required()
+def download(request, path):
+    directory = MEDIA_ROOT+'users/'+str(request.user.id)+'/'
+    #in unix you can specify a filename like this "../../home/private"
+    #which would end up looking like this /var/www-django/../../home/private
+    #this would give you access to files you are not supposed to be able to get to...
+    if ('..' not in path and os.path.isfile(directory+path)):
+        response = HttpResponse() # 200 OK
+        del response['content-type'] # We'll let the web server guess this.
+        response['X-Sendfile'] = directory+path
+        return response
+    raise Http404
+
 @login_required()
 def manager(request):
     #items = get_job_list()
@@ -157,10 +197,98 @@ def format_files(directory, path):
     ext = os.path.splitext(path)[1][1:]
     exe = True if ext in TASK_UPLOAD_FILE_EXTENSIONS else False
     return {
-        'name':path,
+        'filename':path,
         'modified':datetime.fromtimestamp(s.st_mtime).strftime('%Y-%m-%d %I:%M %p'),
         'mtime':s.st_mtime,
         'size':humanize_bytes(s.st_size),
         'ext':ext,
         'exe':exe
     }
+
+#SOCKET.IO STUFF
+
+#@events.on_message(channel="^room-")
+#def message(request, socket, context, message):
+#    """
+#    Event handler for a room receiving a message. First validates a
+#    joining user's name and sends them the list of users.
+#    """
+#    message = message[0]
+#    room = get_object_or_404(ChatRoom, id=message["room"])
+#    if message["action"] == "start":
+#        user, created = room.users.get_or_create(name=strip_tags(message["name"]))
+#        if not created:
+#            socket.send({"action": "in-use"})
+#        else:
+#            context["user"] = user
+#            users = [u.name for u in room.users.exclude(id=user.id)]
+#            socket.send({"action": "started", "users": users})
+#            user.session = socket.session.session_id
+#            user.save()
+#            joined = {"action": "join", "name": user.name, "id": user.id}
+#            socket.send_and_broadcast_channel(joined)
+#    else:
+#        try:
+#            user = context["user"]
+#        except KeyError:
+#            return
+#        if message["action"] == "message":
+#            message["message"] = strip_tags(message["message"])
+#            message["name"] = user.name
+#            socket.send_and_broadcast_channel(message)
+
+#@events.on_finish(channel="^room-")
+#def finish(request, socket, context):
+#    """
+#    Event handler for a socket session ending in a room. Broadcast
+#    the user leaving and delete them from the DB.
+#    """
+#    try:
+#        user = context["user"]
+#    except KeyError:
+#        return
+#    socket.broadcast_channel({"action": "leave", "name": user.name, "id": user.id})
+#    user.delete()
+#
+#def rooms(request, template="rooms.html"):
+#    """
+#    Homepage - lists all rooms.
+#    """
+#    context = {"rooms": ChatRoom.objects.all()}
+#    return render(request, template, context)
+#
+#def room(request, slug, template="room.html"):
+#    """
+#    Show a room.
+#    """
+#    context = {"room": get_object_or_404(ChatRoom, slug=slug)}
+#    return render(request, template, context)
+#
+#def create(request):
+#    """
+#    Handles post from the "Add room" form on the homepage, and
+#    redirects to the new room.
+#    """
+#    name = request.POST.get("name")
+#    if name:
+#        room, created = ChatRoom.objects.get_or_create(name=name)
+#        return redirect(room)
+#    return redirect(rooms)
+
+@user_passes_test(lambda user: user.is_staff)
+def system_message(request, template="system_message.html"):
+    return HttpResponse('he go!')
+    #context = {"rooms": ChatRoom.objects.all()}
+    #if request.method == "POST":
+    #    room = request.POST["room"]
+    #    data = {"action": "system", "message": request.POST["message"]}
+    #    try:
+    #        if room:
+    #            broadcast_channel(data, channel="room-" + room)
+    #        else:
+    #            broadcast(data)
+    #    except NoSocket, e:
+    #        context["message"] = e
+    #    else:
+    #        context["message"] = "Message sent"
+    #return render(request, template, context)
