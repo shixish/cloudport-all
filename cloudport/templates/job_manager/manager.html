@@ -10,7 +10,7 @@
 	{% socketio %}
 	{% verbatim %}
 	<script id="job-row" type="text/x-handlebars-template">
-		<strong>{{title}}</strong>
+		<strong>{{filename}}</strong>
 		<span class="controls">
 		{{#if stopped}}
 			<a href="#" class="restart warning button">Restart</a>
@@ -34,7 +34,7 @@
 			{{#if exe}}
 			<a href="#" class="line button run">Run</a>
 			{{/if}}
-			<a href="/media/get/{{name}}" class="save button download">Download</a>
+			<a href="/media/get/{{filename}}" class="save button download">Download</a>
 		</span>
 	</script>
 	<!--<script id="job-rows" type="text/x-handlebars-template">
@@ -306,13 +306,14 @@
 				
 				download: function(){
 					console.log('download', this.model.get('filename'), this.model.get('ext'));
-					return false;
+					//return false;
 				},
 				
 				run: function(e){
 					var post = jQuery.extend({'filename':this.model.get('filename')}, POST_DATA);
 					console.log(this.model.toJSON(), post);
-					$.post('new_job', post, function(d){
+					$.post('new/job', post, function(d){
+						app.jobs.list.fetch();
 						console.log(d);
 					});
 					return false;

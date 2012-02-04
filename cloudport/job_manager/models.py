@@ -1,10 +1,14 @@
 from django.db import models
-from django import forms 
+from django import forms
+from django.contrib import admin
+from django.contrib.auth.models import AnonymousUser
+
 #from cloudport import settings
 from cloudport.settings import TASK_UPLOAD_FILE_EXTENSIONS
 from cloudport.settings import TASK_UPLOAD_FILE_MAX_SIZE
 from django.contrib.auth.models import User
 import json
+import logging
 
 from django.core.files.storage import FileSystemStorage
 fs = FileSystemStorage(location='/var/www-django/media/users')
@@ -46,10 +50,11 @@ fs = FileSystemStorage(location='/var/www-django/media/users')
 #
 #        return file
 
+
 class Job(models.Model):
-    creator = models.ForeignKey(User, related_name='job_creator')
+    creator = models.ForeignKey(User, related_name='job_creator', default=-1)
     created_on = models.DateTimeField(auto_now_add = True)
-    editor  = models.ForeignKey(User, related_name='job_editor')
+    editor  = models.ForeignKey(User, related_name='job_editor', default=-1)
     edited_on  = models.DateTimeField(auto_now = True)
 
     status = models.IntegerField(editable=False, default=0)
@@ -64,6 +69,25 @@ class JobForm(forms.ModelForm):
     class Meta:
         model = Job
         exclude = ('creator','editor')
+
+#class JobAdmin(admin.ModelAdmin):
+#    #form = JobForm
+#    def save_model(self, request, instance, form, change):
+#        user = request.user 
+#        instance = form.save(commit=False)
+#        if not change or not instance.creator:
+#            instance.creator = user
+#        instance.editor = user
+#        instance.save()
+#        form.save_m2m()
+#        return instance
+#    #def save_model(self, request, obj, form, change):
+#    #    logging.debug("I AM HERE! LOOK AT ME!! I NEED ATTENTION")
+#    #    obj.creator = request.user
+#    #    obj.editor = request.user
+#    #    obj.save()
+#
+#admin.site.register(Job, JobAdmin)
 
 class Setting(models.Model):
     setting_name = models.CharField(max_length = 255)

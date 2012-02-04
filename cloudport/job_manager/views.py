@@ -17,6 +17,9 @@ from django_socketio import events, broadcast, broadcast_channel, NoSocket
 
 import os #for directory listing
 import json
+import threading
+import subprocess
+import logging
 from datetime import datetime
 
 from django.core import serializers
@@ -38,30 +41,7 @@ def req_data(request):
 def success(request, title):
     return HttpResponse("The file upload appears to have gone smoothly. <br> <a href=\"/manager/\">go back to manager</a>")
 
-#@login_required()
-#def new_job(request):
-#    if request.method == 'POST':
-#        #post = request.POST.copy() 
-#        #post['creator'] = request.user.id
-#        #post['editor'] = request.user.id
-#        
-#        form = JobForm(request.POST, request.FILES)
-#        form.cleaned_data['creator'] = request.user.id
-#        form.cleaned_data['editor'] = request.user.id
-#        if form.is_valid():
-#            form.save()
-#            #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
-#            return HttpResponse('{"status":"success"}')
-#        else:
-#            errors = json.dumps(form.errors);
-#            return HttpResponse('{"status":"fail", "errors":'+errors+'}')
-#    #else:
-#    #    form = JobForm()
-#    #c = RequestContext(request)
-#    #c.update(csrf(request))
-#    #return render_to_response('job_manager/jobform.html', {'form': form}, c)
-#    return HttpResponse('{"status":"fail", "error":"No data"}')
-    
+
 @login_required()
 def new_job(request):
     if request.method == 'POST':
@@ -70,10 +50,13 @@ def new_job(request):
         #post['editor'] = request.user.id
         
         form = JobForm(request.POST, request.FILES)
-        form.cleaned_data['creator'] = request.user.id
-        form.cleaned_data['editor'] = request.user.id
         if form.is_valid():
-            form.save()
+            job = form.save(commit=False)
+            job.creator = request.user
+            job.editor = request.user
+            job.save()
+            t = ThreadClass(job)
+            t.start()
             #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
             return HttpResponse('{"status":"success"}')
         else:
@@ -85,30 +68,6 @@ def new_job(request):
     #c.update(csrf(request))
     #return render_to_response('job_manager/jobform.html', {'form': form}, c)
     return HttpResponse('{"status":"fail", "error":"No data"}')
-
-#'check_password', 'clean', 'clean_fields', 'date_error_message', 'date_joined', 'delete', 'email', 'email_user', 'file_creator', 'file_editor', 'first_name', 'full_clean', 'get_absolute_url', 'get_all_permissions', 'get_and_delete_messages', 'get_full_name', 'get_group_permissions', 'get_next_by_date_joined', 'get_next_by_last_login', 'get_previous_by_date_joined', 'get_previous_by_last_login', 'get_profile', 'groups', 'has_module_perms', 'has_perm', 'has_perms', 'has_usable_password', 'id', 'is_active', 'is_anonymous', 'is_authenticated', 'is_staff', 'is_superuser', 'job_creator', 'job_editor', 'last_login', 'last_name', 'logentry_set', 'message_set', 'objects', 'password', 'pk', 'prepare_database_save', 'save', 'save_base', 'serializable_value', 'set_password', 'set_unusable_password', 'unique_error_message', 'user_permissions', 'username', 'validate_unique']
-
-#from django.forms.util import ErrorList
-#@login_required()
-#def new_file(request):
-#    if request.method == 'POST':
-#        post = request.POST.copy() 
-#        post['creator'] = request.user.id
-#        post['editor'] = request.user.id
-#        
-#        form = DataFileForm(post, request.FILES)
-#        if form.is_valid():
-#            form.save()
-#            #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
-#            return HttpResponse('{"status":"success"}')
-#        else:
-#            errors = json.dumps(form.errors);
-#            return HttpResponse('{"status":"fail", "errors":'+errors+'}')
-#    #else:
-#        #form = JobForm()
-#    #c = RequestContext(request)
-#    #c.update(csrf(request))
-#    return HttpResponse('{"status":"fail", "error":"No data"}')
     
 @login_required()
 def new_file(request):
@@ -167,8 +126,33 @@ def download(request, path):
         return response
     raise Http404
 
+class ThreadClass(threading.Thread):
+    def __init__(self, job):
+        self.job = job
+        threading.Thread.__init__(self)
+        
+    def run(self):
+        directory = MEDIA_ROOT+'users/'+str(self.job.editor.id)+'/'
+        fn = self.job.filename
+        ext = os.path.splitext(fn)[1][1:]
+        logging.debug("%s recieved %s" % (self.getName(), directory+self.job.filename))
+        if (ext == "py"):
+            subprocess.call(['python', directory+fn])
+        
+        #cmdstr = ['python', self.job]
+        #process = subprocess.Popen(['ls'],stdout=subprocess.PIPE, stderr=subprocess.STDOUT, preexec_fn=os.setuid(10033))
+        #logging.debug(process)
+
 @login_required()
 def manager(request):
+    #t = ThreadClass()
+    #t.start()
+    #now = datetime.now()
+    #logging.debug("%s says Hello World at time: %s" % ("Manager", now))
+    ##print 'uid is %s' % os.getuid()
+    #cmdstr = ['ls']
+    #process = subprocess.call(cmdstr)
+    #logging.debug(process)
     #items = get_job_list()
     #return render_to_response('job_manager/manager.html', {"items":items}, context_instance=RequestContext(request))
     c = RequestContext(request)

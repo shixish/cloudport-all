@@ -103,3 +103,11 @@ TASK_UPLOAD_FILE_MAX_SIZE = "5242880"
 
 ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
 
+import logging
+logging.basicConfig(
+    level = logging.DEBUG,
+    format = '%(asctime)s %(levelname)s %(message)s',
+    filename = '/tmp/django.log',
+    filemode = 'w'
+)
+
