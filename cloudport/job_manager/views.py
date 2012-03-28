@@ -28,6 +28,7 @@ def req_data(request):
     #import time
     #job1 = Job(date=date.today(), title="Test 1", status=0)
     #job1.save()
+    return HttpResponse(str(os.environ['mod_wsgi.version']))
     
     jobs = Job.objects.all()
     #return HttpResponse(jobs)
@@ -55,8 +56,9 @@ def new_job(request):
             job.creator = request.user
             job.editor = request.user
             job.save()
-            t = ThreadClass(job)
-            t.start()
+            run(job)
+            #t = ThreadClass(job)
+            #t.start()
             #return HttpResponseRedirect('/manager/success/')#%request.POST['title'])
             return HttpResponse('{"status":"success"}')
         else:
@@ -126,6 +128,17 @@ def download(request, path):
         return response
     raise Http404
 
+def run(job):
+    directory = MEDIA_ROOT+'users/'+str(job.editor.id)+'/'
+    fn = job.filename
+    ext = os.path.splitext(fn)[1][1:]
+    #logging.debug("%s recieved %s" % (self.getName(), directory+fn))
+    if (ext == "py"):
+        logging.debug("starting process... ")
+        #r = subprocess.Popen(['python', directory+fn])
+        r = os.system('python %s'%directory+fn)
+        logging.debug("done. r=%s"%r)
+
 class ThreadClass(threading.Thread):
     def __init__(self, job):
         self.job = job
@@ -135,9 +148,12 @@ class ThreadClass(threading.Thread):
         directory = MEDIA_ROOT+'users/'+str(self.job.editor.id)+'/'
         fn = self.job.filename
         ext = os.path.splitext(fn)[1][1:]
-        logging.debug("%s recieved %s" % (self.getName(), directory+self.job.filename))
+        logging.debug("%s recieved %s" % (self.getName(), directory+fn))
         if (ext == "py"):
-            subprocess.call(['python', directory+fn])
+            logging.debug("starting process... ")
+            subprocess.Popen(['python', directory+fn])
+            r=os.system('python %s'%directory+fn)
+            logging.debug("done. r=%s"%r)
         
         #cmdstr = ['python', self.job]
         #process = subprocess.Popen(['ls'],stdout=subprocess.PIPE, stderr=subprocess.STDOUT, preexec_fn=os.setuid(10033))
@@ -145,16 +161,6 @@ class ThreadClass(threading.Thread):
 
 @login_required()
 def manager(request):
-    #t = ThreadClass()
-    #t.start()
-    #now = datetime.now()
-    #logging.debug("%s says Hello World at time: %s" % ("Manager", now))
-    ##print 'uid is %s' % os.getuid()
-    #cmdstr = ['ls']
-    #process = subprocess.call(cmdstr)
-    #logging.debug(process)
-    #items = get_job_list()
-    #return render_to_response('job_manager/manager.html', {"items":items}, context_instance=RequestContext(request))
     c = RequestContext(request)
     c.update(csrf(request))
     return render_to_response('job_manager/manager.html', {'file_form':UploadFileForm(), 'job_form':JobForm(), 'bootstrap':'TODO'}, c)

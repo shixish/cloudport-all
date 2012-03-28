@@ -385,7 +385,7 @@
 				},
 				
 				form: function(e){
-                    var pos = $(e.srcElement).position()
+                    var pos = $(e.target).position()
 					$("#file-form").dialog({position:[pos.left+200, pos.top-50]}).dialog("open");
 					return false;
 				},
