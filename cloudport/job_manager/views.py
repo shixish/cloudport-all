@@ -22,6 +22,9 @@ import subprocess
 import logging
 from datetime import datetime
 
+import cPickle
+import random
+
 from django.core import serializers
 def req_data(request):
     #from datetime import date
@@ -132,12 +135,17 @@ def run(job):
     directory = MEDIA_ROOT+'users/'+str(job.editor.id)+'/'
     fn = job.filename
     ext = os.path.splitext(fn)[1][1:]
-    #logging.debug("%s recieved %s" % (self.getName(), directory+fn))
-    if (ext == "py"):
-        logging.debug("starting process... ")
-        #r = subprocess.Popen(['python', directory+fn])
-        r = os.system('python %s'%directory+fn)
-        logging.debug("done. r=%s"%r)
+    job_filename = "/var/www-django/jobsd/jobs_uploads/%s"%random.randint(1,9999999999999)
+    logging.debug("Writing file: %s"%job_filename)
+    cPickle.dump({"directory":directory, "file":fn, "ext":ext}, open(job_filename, "wb"), 2)
+    logging.debug("done.")
+    
+    ##logging.debug("%s recieved %s" % (self.getName(), directory+fn))
+    #if (ext == "py"):
+    #    logging.debug("starting process... ")
+    #    #r = subprocess.Popen(['python', directory+fn])
+    #    r = os.system('python %s'%directory+fn)
+    #    logging.debug("done. r=%s"%r)
 
 class ThreadClass(threading.Thread):
     def __init__(self, job):

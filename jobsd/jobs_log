@@ -1,1 +1,51 @@
-2012-03-28 21:25:59.337654 (INFO): -------- System Started Up ------------2012-03-28 22:07:26.587929 (INFO): -------- System Started Up ------------2012-03-28 22:09:23.517888 (INFO): -------- System Started Up ------------2012-03-28 22:11:42.398296 (INFO): -------- System Started Up ------------2012-03-28 22:11:47.229877 (INFO): EventHandler recieved filename /var/www-django/jobsd/jobs_uploads/fuuusdsdaffa for module .py.2012-03-28 22:12:33.259845 (INFO): EventHandler recieved filename /var/www-django/jobsd/jobs_uploads/fuuu for module .py.2012-03-28 22:15:49.418124 (INFO): -------- System Started Up ------------2012-03-28 22:15:54.229975 (INFO): EventHandler recieved filename /var/www-django/jobsd/jobs_uploads/fuuasdu for module .py.2012-03-28 22:18:36.118212 (INFO): -------- System Started Up ------------2012-03-28 22:18:42.059945 (INFO): EventHandler recieved filename /var/www-django/jobsd/jobs_uploads/basdf for module .py.2012-03-28 22:19:27.948976 (INFO): EventHandler recieved filename /var/www-django/jobsd/jobs_uploads/file for module .py.2012-03-28 22:21:32.898719 (INFO): -------- System Started Up ------------2012-03-28 22:21:39.599950 (INFO): EventHandler recieved filename /var/www-django/jobsd/jobs_uploads/blah for module .2012-03-28 22:21:39.600015 (EROR): Cannot find a module for file extension .2012-03-28 22:22:13.908263 (INFO): -------- System Started Up ------------2012-03-28 22:22:50.399969 (INFO): EventHandler recieved filename /var/www-django/jobsd/jobs_uploads/tessaf for module .py.
+2012-03-28 22:48:34.858338 (INFO): -------- System Started Up ------------
+2012-03-28 22:48:56.488273 (INFO): -------- System Started Up ------------
+2012-03-28 22:49:32.570002 (INFO): EventHandler recieved filename /var/www-django/jobsd/jobs_uploads/file for module .sce.
+2012-03-28 22:49:32.570058 (INFO): Using output path /var/www-django/jobsd/jobs_finished/2255890559758
+2012-03-28 22:49:32.570119 (EROR): Cannot find a module for file extension .sce.
+2012-03-28 22:49:32.570162 (EROR): 2 - No such file or directory
+2012-03-28 23:01:09.268949 (INFO): -------- System Started Up ------------
+2012-03-28 23:03:59.439003 (INFO): -------- System Started Up ------------
+2012-03-28 23:06:37.649036 (INFO): EventHandler recieved file filetest.py
+ for module py
+.
+2012-03-28 23:14:27.489953 (INFO): -------- System Started Up ------------
+2012-03-28 23:17:40.989150 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/omgfile.p.
+2012-03-28 23:20:14.039582 (INFO): -------- System Started Up ------------
+2012-03-28 23:20:27.119042 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/omgfile2.p.
+2012-03-28 23:22:44.199699 (INFO): -------- System Started Up ------------
+2012-03-28 23:22:53.989107 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/omgfile3.p.
+2012-03-28 23:24:36.080207 (INFO): -------- System Started Up ------------
+2012-03-28 23:24:45.249093 (INFO): EventHandler recieved data {'ext': 'py', 'file': 'test.py'}.
+2012-03-28 23:40:27.159661 (INFO): -------- System Started Up ------------
+2012-03-28 23:42:11.590278 (INFO): EventHandler recieved data {'ext': u'py', 'file': u'/var/www-django/media/users/1/blah.py'}.
+2012-03-28 23:43:26.093625 (INFO): EventHandler recieved data {'ext': u'py', 'file': u'/var/www-django/media/users/1/blah.py'}.
+2012-03-28 23:43:34.091619 (INFO): EventHandler recieved data {'ext': u'py', 'file': u'/var/www-django/media/users/1/blah.py'}.
+2012-03-28 23:46:51.081416 (INFO): EventHandler recieved data {'ext': u'sce', 'file': u'/var/www-django/media/users/1/blah.sce'}.
+2012-03-28 23:46:51.081479 (INFO): Using output path /var/www-django/jobsd/jobs_finished/7196488138900
+2012-03-28 23:46:51.081540 (EROR): Cannot find a module for file extension sce.
+2012-03-28 23:46:51.081577 (EROR): 2 - No such file or directory
+2012-03-28 23:48:19.907379 (INFO): EventHandler recieved data {'ext': u'sce', 'file': u'/var/www-django/media/users/1/wavely.sce'}.
+2012-03-28 23:48:19.907431 (INFO): Using output path /var/www-django/jobsd/jobs_finished/4180817568657
+2012-03-28 23:48:19.907476 (EROR): Cannot find a module for file extension sce.
+2012-03-28 23:48:19.907510 (EROR): 2 - No such file or directory
+2012-03-28 23:50:30.490656 (INFO): -------- System Started Up ------------
+2012-03-28 23:50:36.570806 (INFO): EventHandler recieved data {'ext': u'py', 'file': u'/var/www-django/media/users/1/blah.py'}.
+2012-03-28 23:51:49.830402 (INFO): -------- System Started Up ------------
+2012-03-28 23:51:52.893750 (INFO): EventHandler recieved data {'ext': u'py', 'file': u'/var/www-django/media/users/1/blah.py'}.
+2012-03-28 23:51:52.894804 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-28 23:54:33.651409 (INFO): EventHandler recieved data {'ext': u'py', 'file': u'/var/www-django/media/users/1/blah.py'}.
+2012-03-28 23:54:33.652502 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-29 00:00:04.400351 (INFO): -------- System Started Up ------------
+2012-03-29 00:00:16.346093 (INFO): EventHandler recieved data {'ext': u'py', 'file': u'/var/www-django/media/users/1/blah.py'}.
+2012-03-29 00:00:16.346169 (EROR): Cannot find a module for file extension py.
+2012-03-29 01:05:33.890361 (INFO): -------- System Started Up ------------
+2012-03-29 01:05:49.330872 (INFO): EventHandler recieved data {'ext': u'py', 'file': u'/var/www-django/media/users/1/blah.py'}.
+2012-03-29 01:05:49.330939 (EROR): Cannot find a module for file extension py.
+2012-03-29 01:05:49.330979 (EROR): directory
+2012-03-29 01:07:02.588236 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-29 01:07:02.589408 (EROR): Cannot find a module for file extension py.
+2012-03-29 01:07:02.589468 (EROR): global name 'path_to_file' is not defined
+2012-03-29 01:07:50.870623 (INFO): -------- System Started Up ------------
+2012-03-29 01:07:55.519385 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-29 01:07:55.520502 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
