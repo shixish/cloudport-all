@@ -1,0 +1,94 @@
+2012-03-30 22:08:45.297301 (INFO): -------- System Started Up ------------
+2012-03-30 22:10:54.837292 (INFO): -------- System Started Up ------------
+2012-03-30 22:13:23.917457 (INFO): -------- System Started Up ------------
+2012-03-30 22:13:58.109106 (INFO): -------- System Started Up ------------
+2012-03-30 22:14:24.328396 (INFO): -------- System Started Up ------------
+2012-03-30 22:15:04.987243 (INFO): -------- System Started Up ------------
+2012-03-30 22:15:09.213367 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-30 22:15:09.214481 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-30 22:19:20.797400 (INFO): -------- System Started Up ------------
+2012-03-30 22:19:33.602877 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-30 22:19:33.603986 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-30 22:20:08.610918 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-30 22:20:08.612036 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-30 22:24:23.897524 (INFO): -------- System Started Up ------------
+2012-03-30 22:25:03.217185 (INFO): -------- System Started Up ------------
+2012-03-30 22:25:10.751978 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-30 22:25:10.753147 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-30 22:26:55.969621 (INFO): -------- System Started Up ------------
+2012-03-30 23:40:56.050877 (INFO): -------- System Started Up ------------
+2012-03-30 23:41:31.277274 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-30 23:41:31.278688 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-30 23:54:04.935533 (INFO): -------- System Started Up ------------
+2012-03-30 23:56:44.980708 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-30 23:56:44.982079 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-30 23:58:54.749587 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-30 23:58:54.750987 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-30 23:59:42.907750 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-30 23:59:42.909075 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:02:47.550782 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:02:47.552186 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:03:28.425784 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:03:28.427058 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:07:04.289905 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:07:04.291280 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:07:25.860699 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:07:25.861922 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:07:44.206656 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:07:44.207865 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:07:55.309764 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:07:55.311090 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:10:56.625477 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:10:56.626750 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:11:07.306798 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:11:07.307977 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:11:11.840929 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:11:11.842105 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:11:28.080844 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:11:28.082022 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:12:38.532132 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:12:38.533561 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:12:42.682287 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:12:42.683516 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:12:47.140785 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:12:47.141986 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:19:58.189128 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:19:58.190482 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:24:31.418808 (INFO): -------- System Started Up ------------
+2012-03-31 00:25:14.437551 (INFO): -------- System Started Up ------------
+2012-03-31 00:26:36.018150 (INFO): -------- System Started Up ------------
+2012-03-31 00:26:51.711261 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:26:51.712736 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:27:06.673870 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:27:06.675301 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:27:48.498777 (INFO): -------- System Started Up ------------
+2012-03-31 00:27:56.755784 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:27:56.757246 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:28:00.993164 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:28:00.994431 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:28:11.495311 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:28:11.496568 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:28:43.380630 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:28:43.381911 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:28:57.519803 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:28:57.521039 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:29:10.433979 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:29:10.435212 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:29:19.505452 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:29:19.506688 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:29:25.083695 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:29:25.084923 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:33:55.520283 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:33:55.521741 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:36:00.758980 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:36:00.760452 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:37:16.539625 (INFO): -------- System Started Up ------------
+2012-03-31 00:37:22.535655 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:37:22.536995 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:38:53.218452 (INFO): -------- System Started Up ------------
+2012-03-31 00:39:05.584436 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:39:05.585910 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-31 00:39:05.586067 (INFO): JOB START EVENT! {'test': 'ok'}
+2012-03-31 00:39:40.598572 (INFO): -------- System Started Up ------------
+2012-03-31 00:39:44.976517 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
+2012-03-31 00:39:44.977895 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']

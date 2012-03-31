@@ -82,6 +82,7 @@ INSTALLED_APPS = (
     'tastypie',
     #'cloudport.polls',
     'cloudport.job_manager',
+    'cloudport.dispatcher',
     'cloudport.templates', #needed to do this to make the templatetags work...
     'django_socketio',
     #'django_socketio.templatetags',
@@ -111,3 +112,14 @@ logging.basicConfig(
     filemode = 'w'
 )
 
+JOB_DIR = "/var/www-django/cloudport/dispatcher"
+JOB_LOG_FILE = "{0}/log".format(JOB_DIR)
+JOB_ERROR_DIR = "{0}/error".format(JOB_DIR)
+JOB_UPLOAD_DIR = "{0}/uploads".format(JOB_DIR)
+JOB_FINISHED_DIR = "{0}/finished".format(JOB_DIR)
+#
+#ROOT_DIR = "/var/www-django/jobsd"
+#LOG_FILE = "{0}/log".format(ROOT_DIR)
+#PATH_TO_STDOUT = "{0}/finished".format(ROOT_DIR)
+#PATH_TO_ERROUT = "{0}/errors".format(ROOT_DIR)
+#PATH_TO_UPLOADS = "{0}/uploads".format(ROOT_DIR)

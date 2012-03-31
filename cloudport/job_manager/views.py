@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required #provides the @login_r
 
 from cloudport.settings import MEDIA_ROOT
 from cloudport.settings import TASK_UPLOAD_FILE_EXTENSIONS
+from cloudport.settings import JOB_ERROR_DIR
+from cloudport.settings import JOB_UPLOAD_DIR
+from cloudport.settings import JOB_FINISHED_DIR
 from cloudport.job_manager.forms import * #lets me use the forms i added in the forms file
 from cloudport.job_manager.models import * #lets me use models...
 
@@ -131,41 +134,29 @@ def download(request, path):
         return response
     raise Http404
 
+from cloudport.dispatcher.signals import job_start
+from cloudport.dispatcher.signals import job_done
+from django.dispatch import receiver
+
 def run(job):
     directory = MEDIA_ROOT+'users/'+str(job.editor.id)+'/'
     fn = job.filename
     ext = os.path.splitext(fn)[1][1:]
-    job_filename = "/var/www-django/jobsd/jobs_uploads/%s"%random.randint(1,9999999999999)
-    logging.debug("Writing file: %s"%job_filename)
+    job_filename = os.path.join(JOB_UPLOAD_DIR, "%s"%random.randint(1,9999999999999))
+    logging.debug("JOB CREATION: Writing file: %s"%job_filename)
     cPickle.dump({"directory":directory, "file":fn, "ext":ext}, open(job_filename, "wb"), 2)
-    logging.debug("done.")
-    
-    ##logging.debug("%s recieved %s" % (self.getName(), directory+fn))
-    #if (ext == "py"):
-    #    logging.debug("starting process... ")
-    #    #r = subprocess.Popen(['python', directory+fn])
-    #    r = os.system('python %s'%directory+fn)
-    #    logging.debug("done. r=%s"%r)
+    job_start.send(sender="job", event={'test':'ok'})
 
-class ThreadClass(threading.Thread):
-    def __init__(self, job):
-        self.job = job
-        threading.Thread.__init__(self)
-        
-    def run(self):
-        directory = MEDIA_ROOT+'users/'+str(self.job.editor.id)+'/'
-        fn = self.job.filename
-        ext = os.path.splitext(fn)[1][1:]
-        logging.debug("%s recieved %s" % (self.getName(), directory+fn))
-        if (ext == "py"):
-            logging.debug("starting process... ")
-            subprocess.Popen(['python', directory+fn])
-            r=os.system('python %s'%directory+fn)
-            logging.debug("done. r=%s"%r)
-        
-        #cmdstr = ['python', self.job]
-        #process = subprocess.Popen(['ls'],stdout=subprocess.PIPE, stderr=subprocess.STDOUT, preexec_fn=os.setuid(10033))
-        #logging.debug(process)
+
+@receiver(job_start)
+def job_is_start(sender, event, **kwargs):
+    logging.debug("JOB START EVENT! %s"%event)
+
+@receiver(job_done)
+def job_is_done(sender, event, **kwargs):
+    logging.debug("JOB DONE EVENT! %s"%event)
+    
+
 
 @login_required()
 def manager(request):
@@ -290,3 +281,44 @@ def system_message(request, template="system_message.html"):
     #    else:
     #        context["message"] = "Message sent"
     #return render(request, template, context)
+    
+
+
+
+
+import pyinotify
+
+class WatchForFinished(pyinotify.ProcessEvent):
+    def process_IN_MOVED_TO(self, event):
+        logging.debug("JOB FINISHED! %s"%event.pathname)
+        os.remove(event.pathname)
+        
+class WatchForError(pyinotify.ProcessEvent):
+    def process_IN_MOVED_TO(self, event):
+        logging.debug("JOB ERROR! %s"%event.pathname)
+
+
+class WatcherThread(threading.Thread):
+    def __init__(self, directory, watcher):
+        self.directory = directory
+        self.watcher = watcher
+        threading.Thread.__init__(self)
+    
+    def run(self):
+        wm = pyinotify.WatchManager()
+        notifier = pyinotify.Notifier(wm, self.watcher())
+        wdd = wm.add_watch(self.directory, pyinotify.IN_MOVED_TO, rec=True)
+        notifier.loop()
+
+t = WatcherThread(JOB_FINISHED_DIR, WatchForFinished)
+t.setDaemon(True)
+t.start()
+
+t = WatcherThread(JOB_ERROR_DIR, WatchForError)
+t.setDaemon(True)
+t.start()
+
+#wm = pyinotify.WatchManager()
+#notifier = pyinotify.Notifier(wm, self.watcher())
+#wdd = wm.add_watch(JOB_FINISHED_DIR, pyinotify.IN_MOVED_TO, rec=True)
+#notifier.loop(daemonize=True)

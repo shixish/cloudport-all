@@ -12,21 +12,31 @@ import MySQLdb as db
 import random
 import datetime
 
-from settings import *
+from cloudport.settings import JOB_LOG_FILE
+from cloudport.settings import JOB_ERROR_DIR
+from cloudport.settings import JOB_UPLOAD_DIR
+from cloudport.settings import JOB_FINISHED_DIR
+from cloudport.dispatcher.signals import job_done
+from cloudport.dispatcher.signals import job_start
+from django.dispatch import receiver
 
 def log_msg(message, lvl=1):
     """
     Log some message to the global log file
     """
-    global LOG_FILE
+    global JOB_LOG_FILE
     lvl_code = { 1: "INFO", 2: "EROR" }
     if len(message) < 1:
         return
-    with open(LOG_FILE, "a") as f:
+    with open(JOB_LOG_FILE, "a") as f:
         f.write("{0} ({1}): {2}\n".format(datetime.datetime.utcnow(), 
                                          lvl_code[lvl], 
                                          message))
     return
+
+@receiver(job_start)
+def job_is_start(sender, event, **kwargs):
+    log_msg("JOB START EVENT! %s"%event)
 
 """
 These are the modules which handle jobs. They have the same
@@ -40,7 +50,7 @@ def sce(data):
     """
     Handle .sce and .sci files (scilab)
     """
-    #global LOG_FILE
+    #global JOB_LOG_FILE
     #global ROOT_DIR
     #global PATH_TO_STDOUT
     #global PATH_TO_ERROUT
@@ -64,10 +74,6 @@ import subprocess
 def py(data):
     # Need some way of keeping users from uploading harmful scripts:
     # Perhaps change user to nobody group nobody
-    global ROOT_DIR
-    global LOG_FILE
-    global PATH_TO_STDOUT
-    global PATH_TO_ERROUT
     # TODO TODO TODO
     path = data["directory"]+data["file"]
     subprocess.Popen(['python', path], cwd=data["directory"])
@@ -75,6 +81,7 @@ def py(data):
     pass
 
 import cPickle
+import shutil
 
 class EventHandler(pyinotify.ProcessEvent):
     """
@@ -84,22 +91,31 @@ class EventHandler(pyinotify.ProcessEvent):
     process results.
     """
     def process_IN_CREATE(self, event):
+        error = False;
         try:
             data = cPickle.load(open(event.pathname, "rb"))
             #data = {"file":"test.py", "ext":"py"}
             log_msg("EventHandler recieved data {0}.".format(data))
+            module_list = { "sce" : sce, "py" : py } # the main list of modules
+            job_id = random.randint(1,9999999999999) # TODO: from the database
+            try:
+                module_list[data["ext"]](data)
+            except Exception as e:
+                log_msg("Cannot find a module for file extension {0}.".format(data["ext"]), 2)
+                log_msg("Bad {0}".format(e.args[0]), 2)
+                error = True
         except:
             log_msg("Invalid input file {0}.".format(event.pathname), 2)
-        #os.remove(event.pathname)
-
-        module_list = { "sce" : sce, "py" : py } # the main list of modules
-        job_id = random.randint(1,9999999999999) # TODO: from the database
-        try:
-            module_list[data["ext"]](data)
-        except Exception as e:
-            log_msg("Cannot find a module for file extension {0}.".format(data["ext"]), 2)
-            log_msg("Bad {0}".format(e.args[0]), 2)
+            error = True
         
+        basename = os.path.basename(event.pathname)
+        if error:
+            shutil.move(event.pathname, os.path.join(JOB_ERROR_DIR, basename))
+        else:
+            shutil.move(event.pathname, os.path.join(JOB_FINISHED_DIR, basename))
+        
+        #job_start.send(sender="job", event={'test':'ok'})
+        job_done.send(sender="something", event={'test':'ok'});
         
         #basepath, extension = os.path.splitext(event.pathname)
         #module_list = { ".sce" : sce, ".py" : py } # the main list of modules

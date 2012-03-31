@@ -49,3 +49,14 @@
 2012-03-29 01:07:50.870623 (INFO): -------- System Started Up ------------
 2012-03-29 01:07:55.519385 (INFO): EventHandler recieved data {'directory': '/var/www-django/media/users/1/', 'ext': u'py', 'file': u'blah.py'}.
 2012-03-29 01:07:55.520502 (INFO): executing: ['python', u'/var/www-django/media/users/1/blah.py']
+2012-03-30 21:56:07.365302 (INFO): -------- System Started Up ------------
+2012-03-30 21:56:14.911841 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/test.
+2012-03-30 21:57:44.197038 (INFO): -------- System Started Up ------------
+2012-03-30 21:57:54.999214 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/testage.
+2012-03-30 21:58:05.132099 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/tesst.
+2012-03-30 21:58:12.464575 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/whyunowork.
+2012-03-30 21:58:23.714704 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/work.
+2012-03-30 21:58:49.987962 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/work.
+2012-03-30 21:59:02.938412 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/file.
+2012-03-30 22:00:57.886992 (INFO): -------- System Started Up ------------
+2012-03-30 22:01:06.819236 (EROR): Invalid input file /var/www-django/jobsd/jobs_uploads/hello?.
